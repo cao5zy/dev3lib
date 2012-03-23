@@ -338,5 +338,14 @@ namespace Dev3Lib.Algorithms
 
             return source.SafeFindAll(n => target.SafeExists(m => compare(n, m)));
         }
+
+        [DebuggerStepThrough]
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
+        {
+            if (source == null)
+                return true;
+
+            return !source.GetEnumerator().MoveNext();
+        }
     }
 }
