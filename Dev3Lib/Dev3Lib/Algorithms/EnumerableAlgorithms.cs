@@ -90,23 +90,25 @@ namespace Dev3Lib.Algorithms
 
         private static List<T> FindAll<T>(this IEnumerable<T> items, Predicate<T> predicate)
         {
-            if (items is List<T>)
-                return ((List<T>)items).FindAll(predicate);
+            var list = items as List<T>;
+            if (list != null)
+                return list.FindAll(predicate);
 
-            if (items is T[])
-                return new List<T>(Array.FindAll((T[])items, predicate));
+            var arr = items as T[];
+            if (arr != null)
+                return new List<T>(Array.FindAll<T>(arr, predicate));
 
-            List<T> list = new List<T>();
+            List<T> results = new List<T>();
 
             var en = items.GetEnumerator();
 
             while (en.MoveNext())
             {
                 if (predicate(en.Current))
-                    list.Add(en.Current);
+                    results.Add(en.Current);
             }
 
-            return list;
+            return results;
         }
 
         [DebuggerStepThrough]
