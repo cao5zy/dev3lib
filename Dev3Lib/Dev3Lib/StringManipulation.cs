@@ -16,5 +16,10 @@ namespace Dev3Lib
         {
             return string.IsNullOrEmpty(str);
         }
+
+        public static bool IsNotEmpty(this string str)
+        {
+            return !string.IsNullOrEmpty(str);
+        }
     }
 }
