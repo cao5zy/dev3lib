@@ -1,7 +1,6 @@
 ﻿using Dev3Lib.Media;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using OpenNETCF.Media.MP3;
 using IdSharp.Tagging.ID3v1;
 using IdSharp.Tagging.ID3v2;
 
@@ -109,18 +108,6 @@ namespace Dev3Lib.Test
 
             Assert.AreEqual("czy", target.Title);
 
-        }
-
-        [TestMethod]
-        public void Edit_Test()
-        {
-            ID3Tag tag = ID3Tag.FromFile(@"f:\30.mp3");
-            string title = tag.Title;
-            string artist = tag.Artist;
-
-            tag.Title = "czy";
-            tag.Artist = "czy artist";
-            tag.WriteToFile();
         }
 
         [TestMethod]
