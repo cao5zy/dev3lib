@@ -45,6 +45,7 @@
     <Compile Include="Algorithms\EnumerableAlgorithms.cs" />
     <Compile Include="Media\Mp3TagID3V1.cs" />
     <Compile Include="Notification.cs" />
+    <Compile Include="Pagination.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringManipulation.cs" />
   </ItemGroup>
