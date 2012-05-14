@@ -9,7 +9,7 @@ namespace Dev3Lib.Algorithms
 {
     public static class EnumerableAlgorithms
     {
-          [DebuggerStepThrough]
+        [DebuggerStepThrough]
         public static void SafeForEach<T>(this IEnumerable<T> items, Action<T> action)
         {
             if (items == null)
@@ -247,7 +247,7 @@ namespace Dev3Lib.Algorithms
         }
 
         [DebuggerStepThrough]
-        public static bool SafeIsEqual<T>(this IEnumerable<T> source, IEnumerable<T> target, Func<T,T,bool> compare)
+        public static bool SafeIsEqual<T>(this IEnumerable<T> source, IEnumerable<T> target, Func<T, T, bool> compare)
         {
             return !(source.SafeExists(n => !target.SafeExists(m => compare(m, n)))
                 || target.SafeExists(n => !source.SafeExists(m => compare(m, n))));
@@ -313,7 +313,7 @@ namespace Dev3Lib.Algorithms
             List<T> list = new List<T>(source.SafeToEnumerable());
 
             source.SafeTakeFirstHalf().SafeForEach(
-                n=>list.Remove(n)
+                n => list.Remove(n)
                 );
 
             return list;
@@ -333,7 +333,7 @@ namespace Dev3Lib.Algorithms
         }
 
         [DebuggerStepThrough]
-        public static IEnumerable<T> SafeGetOverlapped<T>(this IEnumerable<T> source, IEnumerable<T> target, Func<T,T,bool> compare)
+        public static IEnumerable<T> SafeGetOverlapped<T>(this IEnumerable<T> source, IEnumerable<T> target, Func<T, T, bool> compare)
         {
             if (source.IsNullOrEmpty() || target.IsNullOrEmpty())
                 return new T[] { };
@@ -348,6 +348,21 @@ namespace Dev3Lib.Algorithms
                 return true;
 
             return !source.GetEnumerator().MoveNext();
+        }
+
+        public static int GetPosition<T>(this IEnumerable<T> source, T obj) where T : class
+        {
+            int i = 0;
+            var en = source.GetEnumerator();
+            while (en.MoveNext())
+            {
+                if (Object.ReferenceEquals(en.Current,obj))
+                    return i;
+                else
+                    i++;
+            }
+
+            throw new PostionNotFoundException();
         }
     }
 }
