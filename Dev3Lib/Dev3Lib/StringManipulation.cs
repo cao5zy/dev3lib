@@ -22,11 +22,6 @@ namespace Dev3Lib
             return !string.IsNullOrEmpty(str);
         }
 
-        public static int ToInt32(this string value)
-        {
-            if (value.IsNullOrEmpty())
-                return 0;
-            return int.Parse(value);
-        }
+        
     }
 }
