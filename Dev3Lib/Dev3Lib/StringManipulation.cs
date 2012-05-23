@@ -27,11 +27,6 @@ namespace Dev3Lib
             return str.IsNotEmpty() && str.Length <= len;
         }
 
-        public static bool NotExceed(this string str, int len)
-        {
-            return str.IsNotEmpty() && str.Length <= len;
-        }
-
         public static bool NullOrNotExceed(this string str, int len)
         {
             return str == null || str.Length <= len;
