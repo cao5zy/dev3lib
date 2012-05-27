@@ -356,7 +356,7 @@ namespace Dev3Lib.Algorithms
             var en = source.GetEnumerator();
             while (en.MoveNext())
             {
-                if (Object.ReferenceEquals(en.Current,obj))
+                if (Object.ReferenceEquals(en.Current, obj))
                     return i;
                 else
                     i++;
@@ -364,5 +364,33 @@ namespace Dev3Lib.Algorithms
 
             throw new PostionNotFoundException();
         }
+
+        public static T SafeLastOrDefault<T>(this IEnumerable<T> items)
+        {
+            if (items.IsNullOrEmpty())
+                return default(T);
+
+
+            {
+                var list = items as IList<T>;
+                if (list != null)
+                    return list[list.Count - 1];
+            }
+
+            {
+                var list = items as IList;
+                if (list != null)
+                    return (T)list[list.Count - 1];
+            }
+
+            var en = items.GetEnumerator();
+            T last = default(T);
+            while (en.MoveNext())
+                last = en.Current;
+
+            return last;
+
+        }
+
     }
 }
