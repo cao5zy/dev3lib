@@ -392,5 +392,23 @@ namespace Dev3Lib.Algorithms
 
         }
 
+        public static void SafeForeach(this IEnumerable items, Action<object> action)
+        {
+            foreach (var obj in items)
+            {
+                action(obj);
+            }
+        }
+
+        public static List<T> SafeConvertAll<T>(this IEnumerable items, Func<object, T> func)
+        {
+            List<T> itemList = new List<T>();
+            foreach (var obj in items)
+            {
+                itemList.Add(func(obj));
+            }
+
+            return itemList;
+        }
     }
 }
