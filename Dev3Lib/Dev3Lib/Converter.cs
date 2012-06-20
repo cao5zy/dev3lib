@@ -20,5 +20,13 @@ namespace Dev3Lib
                 return 0;
             return double.Parse(value);
         }
+
+        public static DateTime ToDateTime(this string value)
+        {
+            if (value.IsNullOrEmpty())
+                return DateTime.MinValue;
+            return DateTime.Parse(value);
+        }
+
     }
 }

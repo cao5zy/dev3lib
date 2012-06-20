@@ -88,6 +88,22 @@ namespace Dev3Lib.Algorithms
             return items.FindAll(predicate);
         }
 
+        public static List<T> SafeFindAll<T>(this IEnumerable items, Predicate<T> predicate)
+        {
+            if (items == null)
+                return new List<T>();
+
+            var en = items.GetEnumerator();
+            List<T> filteredItems = new List<T>();
+            while (en.MoveNext())
+            {
+                if (predicate((T)en.Current))
+                    filteredItems.Add((T)en.Current);
+            }
+
+            return filteredItems;
+        }
+
         private static List<T> FindAll<T>(this IEnumerable<T> items, Predicate<T> predicate)
         {
             var list = items as List<T>;
@@ -410,5 +426,7 @@ namespace Dev3Lib.Algorithms
 
             return itemList;
         }
+
+        
     }
 }
