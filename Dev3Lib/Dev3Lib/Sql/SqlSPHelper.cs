@@ -42,12 +42,15 @@ namespace Dev3Lib.Sql
             }
 
             return list;
+        }
 
+        public int ExecuteWithNonQuery()
+        {
+            return _cmd.ExecuteNonQuery();
         }
         public void Dispose()
         {
             _conn.Close();
-            throw new NotImplementedException();
         }
     }
 }
