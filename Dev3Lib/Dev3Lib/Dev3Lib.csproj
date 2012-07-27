@@ -50,6 +50,7 @@
     <Compile Include="Notification.cs" />
     <Compile Include="Pagination.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sql\SqlTableSelectCmd.cs" />
     <Compile Include="Sql\SqlSPHelper.cs" />
     <Compile Include="StringManipulation.cs" />
     <Compile Include="Web\DicExpressionBuilder.cs" />
