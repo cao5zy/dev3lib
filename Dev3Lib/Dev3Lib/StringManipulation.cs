@@ -31,5 +31,10 @@ namespace Dev3Lib
         {
             return str == null || str.Length <= len;
         }
+
+        public static bool OrdinalIngoreCaseCompare(this string str, string target)
+        {
+            return string.Compare(str, target, StringComparison.OrdinalIgnoreCase) == 0;
+        }
     }
 }
