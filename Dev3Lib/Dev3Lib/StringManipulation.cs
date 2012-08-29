@@ -36,5 +36,25 @@ namespace Dev3Lib
         {
             return string.Compare(str, target, StringComparison.OrdinalIgnoreCase) == 0;
         }
+
+        public static int IndexOfT(this string str, char c, int startIndex, int returnAtPosCount)
+        {
+            int pos = str.IndexOf(c, startIndex);
+            int posCount = 0;
+            if (pos == -1)
+                return pos;
+            posCount++;
+
+            for (int i = 0; i < returnAtPosCount && posCount != returnAtPosCount; i++)
+            {
+                pos = str.IndexOf(c, ++pos);
+                if (pos == -1)
+                    return pos;
+                else
+                    posCount++;
+            }
+
+            return pos;
+        }
     }
 }

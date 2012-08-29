@@ -14,7 +14,7 @@ namespace Dev3Lib.Web
 
         public static object GetEvalData(string expression)
         {
-            return DicLocation.GetLanguageValue(expression);
+            return DicLocation.GetResourceValue(expression);
         }
 
 

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Web;
 using System.IO;
 using System.Xml.Linq;
+using System.Web.Caching;
 
 namespace Dev3Lib.Web
 {
@@ -16,37 +17,11 @@ namespace Dev3Lib.Web
         const string defaultFileName = "dic.resx";
         const string defaultCultureName = "en-US";
 
-        class cacheItem
+        public static string GetResourceValue(string key)
         {
-            private readonly DateTime _createdTime = DateTime.Now;
-
-            public bool IsExpired
-            {
-                get
-                {
-                    return _createdTime.Subtract(DateTime.Now) > TimeSpan.FromHours(1);
-                }
-            }
-
-            public string Item { get; set; }
-        }
-
-        private static Dictionary<string, cacheItem> LanguageCaches
-        {
-            get
-            {
-                if (HttpContext.Current.Application["DicLocation_Cache"] == null)
-                    HttpContext.Current.Application["DicLocation_Cache"] = new Dictionary<string, cacheItem>();
-
-                return (Dictionary<string, cacheItem>)HttpContext.Current.Application["DicLocation_Cache"];
-            }
-        }
-
-        private static string GetResourceValue(string key)
-        {
+            key = key.Replace(' ', '_');
             var cultureName = Thread.CurrentThread.CurrentUICulture.Name;
             var languageFolder = HttpContext.Current.Request.MapPath("App_GlobalResources");
-
 
             string defaultFullFileName = Path.Combine(languageFolder, defaultFileName);
             string fullFileName = string.Empty;
@@ -65,37 +40,56 @@ namespace Dev3Lib.Web
                     fullFileName = defaultFullFileName;
             }
 
-            XDocument doc = XDocument.Load(fullFileName);
-            var value = (from n in doc.Descendants("data")
-                         where string.Compare(n.Attribute("name").Value, key, StringComparison.OrdinalIgnoreCase) == 0
-                         select n.Descendants("value").Single().Value)
-                   .SingleOrDefault();
-
-            return value;
-        }
-
-        public static string GetLanguageValue(string entryKey)
-        {
-            cacheItem item;
-            if (LanguageCaches.TryGetValue(entryKey, out item))
+            var lanDic = HttpContext.Current.Cache.Get(cultureName) as Dictionary<string, string>;
+            if (lanDic == null)
             {
-                if (item.IsExpired)
-                    LanguageCaches[entryKey] = new cacheItem
-                    {
-                        Item = GetResourceValue(entryKey)
-                    };
-                else
-                    return item.Item;
+                var dic = BuildDicSource(fullFileName);
+                HttpContext.Current.Cache.Insert(cultureName, dic, new CacheDependency(fullFileName), Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(30));
+                try
+                {
+                    return dic[key];
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    throw new KeyNotFoundException(string.Format("the missing key is {0}", key), ex);
+                }
             }
             else
             {
-                LanguageCaches.Add(entryKey, new cacheItem
+                try
                 {
-                    Item = GetResourceValue(entryKey)
-                });
+                    return lanDic[key];
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    throw new KeyNotFoundException(string.Format("the missing key is {0}", key), ex);
+                }
+            }
+        }
+
+        private static Dictionary<string, string> BuildDicSource(string fullFileName)
+        {
+            XDocument doc = XDocument.Load(fullFileName);
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+
+            foreach (var n in (from m in doc.Descendants("data") select m))
+            {
+                try
+                {
+                    dic.Add(n.Attribute("name").Value, n.Descendants("value").Single().Value);
+                }
+                catch (ArgumentException ex)
+                {
+                    throw new ArgumentException(string.Format("the key {0} is duplicated", n.Attribute("name").Value), ex);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    throw new InvalidOperationException(string.Format("the key {0} has not value", n.Attribute("name").Value), ex);
+                }
             }
 
-            return LanguageCaches[entryKey].Item;
+            return dic;
         }
+
     }
 }

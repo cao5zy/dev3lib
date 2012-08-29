@@ -63,6 +63,7 @@
     <Compile Include="Mp3TagID3V1Test.cs" />
     <Compile Include="PaginationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringManipulationTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dev3Lib\Dev3Lib.csproj">
