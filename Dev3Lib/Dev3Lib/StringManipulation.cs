@@ -56,5 +56,15 @@ namespace Dev3Lib
 
             return pos;
         }
+
+        public static string FormatWith(this string targetStr, object val1)
+        {
+            return string.Format(targetStr, val1);
+        }
+
+        public static string FormatWith(this string targetStr, object val1, object val2)
+        {
+            return string.Format(targetStr, val1, val2);
+        }
     }
 }
