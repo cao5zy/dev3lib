@@ -6,17 +6,17 @@ using System.Text;
 
 namespace Dev3Lib.Sql
 {
-    public abstract class AbstractSelector
+    public interface ISelector
     {
-        public abstract T Read<T>(Func<IDataReader, T> convert,
+        T Read<T>(Func<IDataReader, T> convert,
             string sql,
             IWhere where);
 
-        public abstract List<T> Return<T>(Func<IDataReader, T> convert,
+        List<T> Return<T>(Func<IDataReader, T> convert,
             string sql,
             IWhere where);
 
-        public abstract int Count(string sql,
+        int Count(string sql,
             IWhere where);
     }
 }

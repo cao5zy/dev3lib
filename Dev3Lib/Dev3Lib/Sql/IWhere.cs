@@ -10,9 +10,11 @@ namespace Dev3Lib.Sql
         IWhere And(IWhere where);
         IWhere Or(IWhere where);
         string ToWhereClause();
+        void ToNameValues(IDictionary<string, object> valueDic);
         string ColumnName { get; set; }
         string ParamName { get; set; }
         object Value { get; set; }
+
         Comparison Comparison { get; set; }
     }
 }

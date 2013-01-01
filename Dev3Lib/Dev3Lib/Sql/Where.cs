@@ -105,5 +105,15 @@ namespace Dev3Lib.Sql
 
             return sb.ToString();
         }
+
+
+        public void ToNameValues(IDictionary<string, object> valueDic)
+        {
+            if(!valueDic.ContainsKey(ParamName))
+                valueDic.Add(ColumnName, Value);
+
+            if (_nextWhere != null)
+                _nextWhere.ToNameValues(valueDic);
+        }
     }
 }
