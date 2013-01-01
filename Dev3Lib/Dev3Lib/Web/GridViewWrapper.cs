@@ -8,8 +8,8 @@ namespace Dev3Lib.Web
 {
     public class GridViewWrapper
     {
-        private List<string> _visisbleColumns = new List<string>();
-        private List<string> _hiddenColumns = new List<string>();
+        private List<int> _visisbleColumnOrders = new List<int>();
+        private List<int> _hiddenColumnOrders = new List<int>();
         private List<string> _originalColumns = new List<string>();
 
         public GridViewWrapper(GridView gridView)
@@ -21,59 +21,60 @@ namespace Dev3Lib.Web
                     _originalColumns.AddRange((from TableCell n in e.Row.Cells
                                                select n.Text));
                 }
+                else if (e.Row.RowType == DataControlRowType.EmptyDataRow)
+                    return;
 
-                if (_visisbleColumns.Count != 0)
+                if (_visisbleColumnOrders.Count != 0)
                 {
-                    ShowColumns(e, _visisbleColumns);
+                    ShowColumns(e, _visisbleColumnOrders);
                 }
-                if (_hiddenColumns.Count != 0)
+                if (_hiddenColumnOrders.Count != 0)
                 {
-                    HideColumns(e, _hiddenColumns);
+                    HideColumns(e, _hiddenColumnOrders);
                 }
             };
         }
-        public string VisibleColumns
+        public int[] VisibleColumnOrders
         {
             get
             {
-                return string.Join(",", _visisbleColumns.ToArray());
+                return _visisbleColumnOrders.ToArray();
             }
             set
             {
-                if (!string.IsNullOrEmpty(value))
-                    _visisbleColumns.AddRange(value.Split(','));
-                else
-                    this._visisbleColumns.Clear();
+                _visisbleColumnOrders.Clear();
+                if (value != null)
+                    _visisbleColumnOrders.AddRange(value);
             }
         }
-        public string HiddenColumns
+        public int[] HiddenColumns
         {
             get
             {
-                return string.Join(",", _hiddenColumns.ToArray());
+                return _hiddenColumnOrders.ToArray();
             }
             set
             {
-                if (!string.IsNullOrEmpty(value))
-                    _hiddenColumns.AddRange(value.Split(','));
-                else
-                    this._hiddenColumns.Clear();
+                _hiddenColumnOrders.Clear();
+
+                if (value != null)
+                    _hiddenColumnOrders.AddRange(value);
             }
         }
 
-        private void ShowColumns(GridViewRowEventArgs e, List<string> showColumnList)
+        private void ShowColumns(GridViewRowEventArgs e, List<int> showColumnOrderList)
         {
             for (int i = 0; i < e.Row.Cells.Count; i++)
             {
-                e.Row.Cells[i].Visible = showColumnList.Contains(_originalColumns[i]);
+                e.Row.Cells[i].Visible = showColumnOrderList.Contains(i);
             }
         }
 
-        private void HideColumns(GridViewRowEventArgs e, List<string> hideColumnList)
+        private void HideColumns(GridViewRowEventArgs e, List<int> hideColumnOrderList)
         {
             for (int i = 0; i < e.Row.Cells.Count; i++)
             {
-                e.Row.Cells[i].Visible = !hideColumnList.Contains(_originalColumns[i]);
+                e.Row.Cells[i].Visible = !hideColumnOrderList.Contains(i);
             }
         }
     }
