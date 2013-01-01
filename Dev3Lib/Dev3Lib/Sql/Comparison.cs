@@ -33,7 +33,6 @@ namespace Dev3Lib.Sql
                 default:
                     throw new InvalidCastException();
             }
-            }
 
         }
     }
