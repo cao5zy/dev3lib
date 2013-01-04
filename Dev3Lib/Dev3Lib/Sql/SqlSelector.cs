@@ -23,20 +23,18 @@ namespace Dev3Lib.Sql
             throw new NotImplementedException();
         }
 
-        private SqlParameterCollection GenerateParameters(IWhere where)
+        private void GenerateParameters(IWhere where, SqlParameterCollection paramColl)
         {
             Dictionary<string, object> valueDic = new Dictionary<string, object>();
             where.ToNameValues(valueDic);
 
             List<SqlParameter> list = new List<SqlParameter>(valueDic.Count);
 
-            SqlParameterCollection paramColl = new SqlParameterCollection();
             foreach (var keypair in valueDic)
             {
                 paramColl.AddWithValue(keypair.Key, keypair.Value);
             }
 
-            return paramColl;
         }
     }
 }

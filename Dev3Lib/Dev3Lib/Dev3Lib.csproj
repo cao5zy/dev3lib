@@ -68,6 +68,7 @@
     <Compile Include="Web\DropdownItemAttribute.cs" />
     <Compile Include="Web\DropdownItemHelper.cs" />
     <Compile Include="Web\GridViewWrapper.cs" />
+    <Compile Include="Web\MessageNotifier.cs" />
     <Compile Include="Web\SessionObjectAttribute.cs" />
     <Compile Include="Web\SessionObjectHelper.cs" />
   </ItemGroup>
