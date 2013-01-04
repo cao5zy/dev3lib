@@ -23,6 +23,12 @@ namespace Dev3Lib.Web
                 add { _del = Delegate.Combine(_del, value); }
                 remove { Delegate.Remove(_del, value); }
             }
+
+            public void Invoke(object s, EventArgs e)
+            {
+                if (_del != null)
+                    _del.DynamicInvoke(s, e);
+            }
         }
 
         private static MessageNotifier _notifier = new MessageNotifier();
