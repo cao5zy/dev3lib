@@ -29,7 +29,7 @@ namespace Dev3Lib.Web
                 remove { Delegate.Remove(_del, value); }
             }
 
-            public void Invoke(object s, NotifierEventArgs e)
+            public void Notify(object s, NotifierEventArgs e)
             {
                 if (_del != null)
                     _del.DynamicInvoke(s, e);
