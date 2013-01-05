@@ -10,21 +10,26 @@ namespace Dev3Lib.Web
     public sealed class MessageNotifier
     {
         private IDictionary _items;
-        private MessageNotifier() {
+        private static readonly object _lockObj = new object();
+        private MessageNotifier()
+        {
             _items = HttpContext.Current.Items;
         }
-
+        public sealed class NotifierEventArgs : EventArgs
+        {
+            public object Data;
+        }
         public class Event
         {
             private Delegate _del;
 
-            public event EventHandler Notifier
+            public event EventHandler<NotifierEventArgs> Notifier
             {
                 add { _del = Delegate.Combine(_del, value); }
                 remove { Delegate.Remove(_del, value); }
             }
 
-            public void Invoke(object s, EventArgs e)
+            public void Invoke(object s, NotifierEventArgs e)
             {
                 if (_del != null)
                     _del.DynamicInvoke(s, e);
@@ -41,13 +46,21 @@ namespace Dev3Lib.Web
             }
         }
 
-        public Event GetEvent(string eventName)
+        public Event this[string eventName]
         {
-            if (!_items.Contains(eventName))
-                _items.Add(eventName, new Event());
+            get
+            {
+                if (!_items.Contains(eventName))
+                {
+                    lock (_lockObj)
+                    {
+                        if (!_items.Contains(eventName))
+                            _items.Add(eventName, new Event());
+                    }
+                }
 
-            return (Event)_items[eventName];
-
+                return (Event)_items[eventName];
+            }
         }
 
     }
