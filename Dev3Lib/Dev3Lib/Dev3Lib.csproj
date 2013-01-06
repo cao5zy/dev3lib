@@ -55,6 +55,7 @@
     <Compile Include="Sections\LingualSection.cs" />
     <Compile Include="Sql\ISelector.cs" />
     <Compile Include="Sql\Comparison.cs" />
+    <Compile Include="Sql\IValue.cs" />
     <Compile Include="Sql\IWhere.cs" />
     <Compile Include="Sql\SqlSelector.cs" />
     <Compile Include="Sql\SqlTableSelectCmd.cs" />
