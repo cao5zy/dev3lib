@@ -31,6 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -53,13 +54,20 @@
     <Compile Include="Pagination.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sections\LingualSection.cs" />
+    <Compile Include="Sql\IInserter.cs" />
+    <Compile Include="Sql\InsertValue.cs" />
     <Compile Include="Sql\ISelector.cs" />
     <Compile Include="Sql\Comparison.cs" />
-    <Compile Include="Sql\IValue.cs" />
+    <Compile Include="Sql\IUpdater.cs" />
+    <Compile Include="Sql\IInsertValue.cs" />
+    <Compile Include="Sql\IUpdateValue.cs" />
     <Compile Include="Sql\IWhere.cs" />
+    <Compile Include="Sql\SqlInserter.cs" />
     <Compile Include="Sql\SqlSelector.cs" />
     <Compile Include="Sql\SqlTableSelectCmd.cs" />
     <Compile Include="Sql\SqlSPHelper.cs" />
+    <Compile Include="Sql\SqlUpdater.cs" />
+    <Compile Include="Sql\UpdateValue.cs" />
     <Compile Include="Sql\Where.cs" />
     <Compile Include="StringManipulation.cs" />
     <Compile Include="Web\ContextObjectAttribute.cs" />
@@ -73,7 +81,6 @@
     <Compile Include="Web\SessionObjectAttribute.cs" />
     <Compile Include="Web\SessionObjectHelper.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)..\..\Dependencies\"</PostBuildEvent>

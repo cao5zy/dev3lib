@@ -16,6 +16,9 @@ namespace Dev3Lib.Sql
         
         public IWhere And(IWhere where)
         {
+            if (_nextWhere != null)
+                throw new InvalidOperationException("only one combination instance is allowed");
+
             _isAnd = true;
             _nextWhere = where;
             return this;
@@ -23,6 +26,9 @@ namespace Dev3Lib.Sql
 
         public IWhere Or(IWhere where)
         {
+            if (_nextWhere != null)
+                throw new InvalidOperationException("only one combination instance is allowed");
+
             _nextWhere = where;
             return this;
         }

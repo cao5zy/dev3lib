@@ -5,12 +5,13 @@ using System.Text;
 
 namespace Dev3Lib.Sql
 {
-    public interface IValue
+    public interface IInsertValue
     {
-        IValue Append(IValue value);
+        IInsertValue Append(IInsertValue value);
         string ColumnName { get; set; }
         string ParamName { get; set; }
         object Value { get; set; }
-        List<IValue> ToList();
+        void ToNameValues(IDictionary<string, object> values);
+        void ToValueClause(IList<string> columnNames, IList<string> valueNames);
     }
 }
