@@ -11,8 +11,11 @@ namespace Dev3Lib.Sql
         private SqlConnection _conn;
         private SqlTransaction _trans;
         private static readonly string _insertFormat = "insert into {0} ({1}) values({2})";
-        public void Insert(IInsertValue value)
+        public void Insert(string tableName, IInsertValue value)
         {
+            if (value == null)
+                return;
+
             Dictionary<string, object> values = new Dictionary<string, object>();
             List<string> columnNames = new List<string>();
             List<string> paramNames = new List<string>();
@@ -28,6 +31,7 @@ namespace Dev3Lib.Sql
 
                     cmd.CommandType = System.Data.CommandType.Text;
                     cmd.CommandText = string.Format(_insertFormat,
+                        tableName,
                         columnNames.SafeJoinWith(","),
                         paramNames.SafeJoinWith(","));
 

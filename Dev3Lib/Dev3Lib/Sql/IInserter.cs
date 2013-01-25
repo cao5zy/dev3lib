@@ -7,6 +7,6 @@ namespace Dev3Lib.Sql
 {
     interface IInserter
     {
-        void Insert(IInsertValue value);
+        void Insert(string tableName, IInsertValue value);
     }
 }

@@ -7,6 +7,6 @@ namespace Dev3Lib.Sql
 {
     interface IUpdater
     {
-        void Update(IUpdateValue value, IWhere where);
+        void Update(string tableName, IUpdateValue value, IWhere where);
     }
 }

@@ -8,6 +8,9 @@ namespace Dev3Lib.Sql
 {
     public class SqlSelector : ISelector
     {
+        private SqlConnection _conn;
+        private SqlTransaction _trans;
+        private static readonly string _selectFormat = "{0} where 1=1 {1}";
         public T Read<T>(Func<System.Data.IDataReader, T> convert, string sql, IWhere where)
         {
             throw new NotImplementedException();
@@ -20,7 +23,25 @@ namespace Dev3Lib.Sql
 
         public int Count(string sql, IWhere where)
         {
-            throw new NotImplementedException();
+            using (var cmd = _conn.CreateCommand())
+            {
+                if (_trans != null)
+                    cmd.Transaction = _trans;
+
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = string.Format(_selectFormat,
+                    sql,
+                    where.ToWhereClause()
+                    );
+
+                GenerateParameters(where, cmd.Parameters);
+
+                var result = cmd.ExecuteScalar();
+                if (result == null)
+                    throw new InvalidOperationException("result count");
+
+                return Convert.ToInt32(result);
+            }
         }
 
         private void GenerateParameters(IWhere where, SqlParameterCollection paramColl)
