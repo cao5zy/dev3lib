@@ -11,7 +11,13 @@ namespace Dev3Lib.Sql
         private SqlConnection _conn;
         private SqlTransaction _trans;
         private static readonly string _selectFormat = "{0} where 1=1 {1}";
-        public IEnumerator<T> Read<T>(Func<System.Data.IDataReader, T> convert, string sql, IWhere where)
+        public SqlSelector(SqlConnection conn, SqlTransaction trans = null)
+        {
+            _conn = conn;
+            _trans = trans;
+        }
+
+        public IEnumerator<T> Read<T>(Converter<System.Data.IDataReader, T> convert, string sql, IWhere where)
         {
             using (var cmd = _conn.CreateCommand())
             {
@@ -19,9 +25,14 @@ namespace Dev3Lib.Sql
                     cmd.Transaction = _trans;
 
                 cmd.CommandType = System.Data.CommandType.Text;
+
+                string whereClause = string.Empty;
+                if (where != null)
+                    whereClause = string.Format("and {0}", where.ToWhereClause());
+
                 cmd.CommandText = string.Format(_selectFormat,
                     sql,
-                    where.ToWhereClause());
+                   whereClause);
 
                 GenerateParameters(where, cmd.Parameters);
 
@@ -33,7 +44,7 @@ namespace Dev3Lib.Sql
             }
         }
 
-        public List<T> Return<T>(Func<System.Data.IDataReader, T> convert, string sql, IWhere where)
+        public List<T> Return<T>(Converter<System.Data.IDataReader, T> convert, string sql, IWhere where)
         {
             using (var cmd = _conn.CreateCommand())
             {
@@ -41,9 +52,14 @@ namespace Dev3Lib.Sql
                     cmd.Transaction = _trans;
 
                 cmd.CommandType = System.Data.CommandType.Text;
+
+                string whereClause = string.Empty;
+                if (where != null)
+                    whereClause = string.Format("and {0}", where.ToWhereClause());
+
                 cmd.CommandText = string.Format(_selectFormat,
                     sql,
-                    where.ToWhereClause());
+                    whereClause);
 
                 GenerateParameters(where, cmd.Parameters);
 
@@ -67,9 +83,14 @@ namespace Dev3Lib.Sql
                     cmd.Transaction = _trans;
 
                 cmd.CommandType = System.Data.CommandType.Text;
+
+                string whereClause = string.Empty;
+                if (where != null)
+                    whereClause = string.Format("and {0}", where.ToWhereClause());
+
                 cmd.CommandText = string.Format(_selectFormat,
                     sql,
-                    where.ToWhereClause()
+                    whereClause
                     );
 
                 GenerateParameters(where, cmd.Parameters);

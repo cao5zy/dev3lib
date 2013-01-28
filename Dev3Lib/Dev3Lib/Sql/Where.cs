@@ -49,7 +49,10 @@ namespace Dev3Lib.Sql
         {
             get
             {
-                return _paramName;
+                if (string.IsNullOrEmpty(_paramName))
+                    return string.Format("@{0}", _columnName);
+                else
+                    return _paramName;
             }
             set
             {
