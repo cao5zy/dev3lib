@@ -12,7 +12,7 @@ namespace Dev3Lib.Test
         {
             string result = new Where { ColumnName = "c1", ParamName = "c1", Comparison = Comparison.Equal, Value = 1 }
                 .And(new Where { ColumnName = "c2", ParamName = "c2", Comparison = Comparison.Equal, Value = 2 })
-                .ToWhereClause();
+                .WhereClause;
 
             Assert.AreEqual("(c1=@c1 AND c2=@c2)", result);
         }
