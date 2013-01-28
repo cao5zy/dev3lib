@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Dev3Lib.Sql
 {
-    interface IInserter
+    public interface IInserter
     {
-        void Insert(string tableName, IInsertValue value);
+        void Insert(string tableName, IEnumerable<IInsertValue> values);
     }
 }

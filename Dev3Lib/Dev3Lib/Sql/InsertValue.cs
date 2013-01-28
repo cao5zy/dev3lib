@@ -7,21 +7,6 @@ namespace Dev3Lib.Sql
 {
     public class InsertValue : IInsertValue
     {
-        private IInsertValue _nextInsertValue;
-
-        public IInsertValue Append(IInsertValue value)
-        {
-            if (_nextInsertValue != null)
-                throw new InvalidOperationException();
-
-            if (value == null)
-                throw new NullReferenceException("value");
-
-            _nextInsertValue = value;
-
-            return this;
-        }
-
         private string _columnName;
         public string ColumnName
         {
@@ -40,11 +25,17 @@ namespace Dev3Lib.Sql
         {
             get
             {
-                return _paramName;
+                if (string.IsNullOrEmpty(_paramName))
+                    return string.Format("@{0}", _columnName);
+                else
+                    return _paramName;
             }
             set
             {
-                _paramName = value;
+                if (value.StartsWith("@"))
+                    _paramName = value;
+                else
+                    _paramName = string.Format("@{0}", value);
             }
         }
 
@@ -59,27 +50,6 @@ namespace Dev3Lib.Sql
             {
                 _value = value;
             }
-        }
-
-        public void ToNameValues(IDictionary<string, object> values)
-        {
-            if (!values.ContainsKey(ParamName))
-                values.Add(ParamName, Value);
-
-            if (_nextInsertValue != null)
-                _nextInsertValue.ToNameValues(values);
-        }
-
-       public void ToValueClause(IList<string> columnNames, IList<string> valueNames)
-        {
-            if (Value != null)
-            {
-                columnNames.Add(ColumnName);
-                valueNames.Add(ParamName);
-            }
-
-            if (_nextInsertValue != null)
-                _nextInsertValue.ToValueClause(columnNames, valueNames);
         }
     }
 }

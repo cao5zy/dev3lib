@@ -10,18 +10,29 @@ namespace Dev3Lib.Sql
     {
         private SqlConnection _conn;
         private SqlTransaction _trans;
-        private static readonly string _insertFormat = "insert into {0} ({1}) values({2})";
-        public void Insert(string tableName, IInsertValue value)
+        public SqlInserter(SqlConnection conn, SqlTransaction trans = null)
         {
-            if (value == null)
-                return;
+            _conn = conn;
+            _trans = trans;
+        }
+        private static readonly string _insertFormat = "insert into {0} ({1}) values({2})";
 
-            Dictionary<string, object> values = new Dictionary<string, object>();
+        public void Insert(string tableName, IEnumerable<IInsertValue> values)
+        {
+            Dictionary<string, object> valuesDic = new Dictionary<string, object>();
             List<string> columnNames = new List<string>();
             List<string> paramNames = new List<string>();
 
-            value.ToValueClause(columnNames, paramNames);
-            value.ToNameValues(values);
+            foreach (var val in values)
+            {
+                if (val.Value == null)
+                    continue;
+
+                valuesDic.Add(val.ParamName, val.Value);
+                columnNames.Add(val.ColumnName);
+                paramNames.Add(val.ParamName);
+            }
+            
 
             if (columnNames.Count != 0)
             {
@@ -35,7 +46,7 @@ namespace Dev3Lib.Sql
                         columnNames.SafeJoinWith(","),
                         paramNames.SafeJoinWith(","));
 
-                    foreach (var item in values)
+                    foreach (var item in valuesDic)
                     {
                         cmd.Parameters.AddWithValue(item.Key, item.Value);
                     }
