@@ -11,14 +11,52 @@ namespace Dev3Lib.Sql
         private SqlConnection _conn;
         private SqlTransaction _trans;
         private static readonly string _selectFormat = "{0} where 1=1 {1}";
-        public T Read<T>(Func<System.Data.IDataReader, T> convert, string sql, IWhere where)
+        public IEnumerator<T> Read<T>(Func<System.Data.IDataReader, T> convert, string sql, IWhere where)
         {
-            throw new NotImplementedException();
+            using (var cmd = _conn.CreateCommand())
+            {
+                if (_trans != null)
+                    cmd.Transaction = _trans;
+
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = string.Format(_selectFormat,
+                    sql,
+                    where.ToWhereClause());
+
+                GenerateParameters(where, cmd.Parameters);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                        yield return convert(reader);
+                }
+            }
         }
 
         public List<T> Return<T>(Func<System.Data.IDataReader, T> convert, string sql, IWhere where)
         {
-            throw new NotImplementedException();
+            using (var cmd = _conn.CreateCommand())
+            {
+                if (_trans != null)
+                    cmd.Transaction = _trans;
+
+                cmd.CommandType = System.Data.CommandType.Text;
+                cmd.CommandText = string.Format(_selectFormat,
+                    sql,
+                    where.ToWhereClause());
+
+                GenerateParameters(where, cmd.Parameters);
+
+                List<T> list = new List<T>();
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                        list.Add(convert(reader));
+
+                    return list;
+                }
+            }
         }
 
         public int Count(string sql, IWhere where)

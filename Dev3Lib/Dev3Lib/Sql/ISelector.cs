@@ -8,7 +8,7 @@ namespace Dev3Lib.Sql
 {
     public interface ISelector
     {
-        T Read<T>(Func<IDataReader, T> convert,
+        IEnumerator<T> Read<T>(Func<IDataReader, T> convert,
             string sql,
             IWhere where);
 
