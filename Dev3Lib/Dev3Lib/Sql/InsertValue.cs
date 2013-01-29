@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Dev3Lib.Sql
 {
-    public class InsertValue : IInsertValue
+    public class InsertValue : IValue
     {
         private string _columnName;
         public string ColumnName

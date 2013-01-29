@@ -17,7 +17,7 @@ namespace Dev3Lib.Sql
         }
         private static readonly string _insertFormat = "insert into {0} ({1}) values({2})";
 
-        public void Insert(string tableName, IEnumerable<IInsertValue> values)
+        public void Insert(string tableName, IEnumerable<IValue> values)
         {
             Dictionary<string, object> valuesDic = new Dictionary<string, object>();
             List<string> columnNames = new List<string>();

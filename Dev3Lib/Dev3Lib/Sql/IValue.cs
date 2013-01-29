@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Dev3Lib.Sql
 {
-    public interface IInsertValue
+    public interface IValue
     {
         string ColumnName { get; set; }
         string ParamName { get; set; }
