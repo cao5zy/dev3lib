@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using Dev3Lib.Algorithms;
 
 namespace Dev3Lib.Sql
 {
@@ -12,17 +13,32 @@ namespace Dev3Lib.Sql
         private SqlTransaction _trans;
         private static readonly string _updateFormat = "update {0} set {1} where 1 = 1 {2}";
 
-        public void Update(string tableName, IUpdateValue value, WhereClause where)
+        public SqlUpdater(SqlConnection conn,
+            SqlTransaction trans)
         {
-            if (value == null)
+            _conn = conn;
+            _trans = trans;
+        }
+
+        public void Update(string tableName, IEnumerable<IValue> values, WhereClause where)
+        {
+            if(values.IsNullOrEmpty())
                 throw new ArgumentNullException("value");
 
-            var values = where.ToNameValues();
+            var whereValues = where.ToNameValues();
             List<string> columnNames = new List<string>();
             List<string> paramNames = new List<string>();
 
-            value.ToNameValues(values);
-            value.ToValueClause(columnNames, paramNames);
+            values.SafeForEach(n=>
+            {
+                if (!whereValues.ContainsKey(n.ParamName))
+                {
+                    whereValues.Add(n.ParamName, n.Value);
+                    columnNames.Add(n.ColumnName);
+                    paramNames.Add(n.ParamName);
+                }
+            });
+
 
             if (columnNames.Count != 0)
             {
@@ -36,7 +52,7 @@ namespace Dev3Lib.Sql
                         columnNames.Select((s, i) => string.Format("{0}={1}", s, paramNames[i])).SafeJoinWith(","),
                         where.Clause);
 
-                    foreach (var item in values)
+                    foreach (var item in whereValues)
                     {
                         cmd.Parameters.AddWithValue(item.Key, item.Value);
                     }

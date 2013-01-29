@@ -61,14 +61,12 @@
     <Compile Include="Sql\Comparison.cs" />
     <Compile Include="Sql\IUpdater.cs" />
     <Compile Include="Sql\IValue.cs" />
-    <Compile Include="Sql\IUpdateValue.cs" />
     <Compile Include="Sql\WhereClause.cs" />
     <Compile Include="Sql\SqlInserter.cs" />
     <Compile Include="Sql\SqlSelector.cs" />
     <Compile Include="Sql\SqlTableSelectCmd.cs" />
     <Compile Include="Sql\SqlSPHelper.cs" />
     <Compile Include="Sql\SqlUpdater.cs" />
-    <Compile Include="Sql\UpdateValue.cs" />
     <Compile Include="StringManipulation.cs" />
     <Compile Include="Web\ContextObjectAttribute.cs" />
     <Compile Include="Web\ContextObjectHelper.cs" />
