@@ -60,7 +60,7 @@
     <Compile Include="Sql\ISelector.cs" />
     <Compile Include="Sql\Comparison.cs" />
     <Compile Include="Sql\IUpdater.cs" />
-    <Compile Include="Sql\IInsertValue.cs" />
+    <Compile Include="Sql\IValue.cs" />
     <Compile Include="Sql\IUpdateValue.cs" />
     <Compile Include="Sql\WhereClause.cs" />
     <Compile Include="Sql\SqlInserter.cs" />
