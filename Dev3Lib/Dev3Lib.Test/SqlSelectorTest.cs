@@ -498,34 +498,10 @@ and CurrentCountryId = 13
             Action<ISelector> run = (selector) =>
             {
                 var list = selector.Return<TestItem>(r => new TestItem { }, "select * from tblTBAAupair",
-                    new Where
-                    {
-                        ColumnName = "BlockedFlag",
-                        ParamName = "BlockedFlag",
-                        Value = 0,
-                        Comparison = Comparison.Equal
-                    }
-                        .And(new Where
-                        {
-                            ColumnName = "AuPairStatusID",
-                            ParamName = "AuPairStatusID",
-                            Comparison = Comparison.Equal,
-                            Value = 1
-                        })
-                        .And(
-                        new Where
-                        {
-                            ColumnName = "GenderId",
-                            Value = 1,
-                        }
-                        )
-                        .And(
-                        new Where
-                        {
-                            ColumnName = "CurrentCountryId",
-                            Value = 13
-                        }));
-
+                    new Where(0, "BlockedFlag")
+                        .And(new Where(1, "AuPairStatusID"))
+                        .And(new Where(1, "GenderId"))
+                        .And(new Where(13, "CurrentCountryId")));
                 Assert.AreEqual(48, list.Count);
             };
 
@@ -547,27 +523,9 @@ and (LastLoggedIn >= '2012-07-13' and LastLoggedIn < '2012-12-12')
 
                 var reader = selector.Read<TestItem>(_convert,
                    "select * from tblTBAAupair",
-                   new Where
-                   {
-                       ColumnName = "AuPairStatusID",
-                       Value = 1,
-                   }.And(
-                   new Where
-                   {
-                       ColumnName = "LastLoggedIn",
-                       ParamName = "LastLoggedIn1",
-                       Value = DateTime.Parse("2012-07-13"),
-                       Comparison = Comparison.GreatorThanEqualTo
-                   }
-                   .And(new Where
-                   {
-                       ColumnName = "LastLoggedIn",
-                       ParamName = "LastLoggedIn2",
-                       Value = DateTime.Parse("2012-12-12"),
-                       Comparison = Comparison.LessThan
-                   })
-                   ));
-
+                   new Where(1,"AuPairStatusID")
+                   .And(new Where(DateTime.Parse("2012-07-13"), "LastLoggedIn","LastLoggedIn1", Comparison.GreatorThanEqualTo)
+                        .And(new Where(DateTime.Parse("2012-12-12"),"LastLoggedIn","LastLoggedIn2", Comparison.LessThan))));
                 int count = 0;
                 while (reader.MoveNext())
                     count++;

@@ -7,45 +7,126 @@ namespace Dev3Lib.Sql
 {
     public abstract class IWhere
     {
-        private IWhere _prevWhere;
+        private readonly string _columnName, _paramName;
         private string _whereClause;
+        private readonly object _value;
+        private readonly IDictionary<string, object> _valueDic = new Dictionary<string, object>();
+        private readonly Comparison _comp;
+
+        public IWhere(string columnName,
+            string paramName,
+            Comparison comp,
+            object value)
+        {
+            if (string.IsNullOrEmpty(columnName))
+                throw new ArgumentNullException(columnName);
+
+            if (string.IsNullOrEmpty(paramName))
+            {
+                _paramName = string.Format("@{0}", columnName);
+            }
+            else
+            {
+                if (paramName.StartsWith("@"))
+                    _paramName = paramName;
+                else
+                    _paramName = string.Format("@{0}", paramName);
+            }
+
+            _columnName = columnName;
+
+            _comp = comp;
+
+            _value = value;
+
+            _whereClause = ToCurrentWhereClause();
+
+            _valueDic.Add(_paramName, _value);
+        }
+
+        public IWhere(string columnName,
+            Comparison comp,
+            object value)
+            : this(columnName, null, comp, value)
+        {
+
+        }
+
+        public IWhere(string columnName,
+            object value)
+            : this(columnName, null, Comparison.Equal, value)
+        {
+
+        }
+
+        protected string ColumnName
+        {
+            get
+            {
+                return _columnName;
+            }
+        }
+
+        protected string ParamName
+        {
+            get
+            {
+                return _paramName;
+            }
+        }
+
+        protected object Value
+        {
+            get
+            {
+                return _value;
+            }
+        }
+
+        protected Comparison Comparison
+        {
+            get
+            {
+                return _comp;
+            }
+        }
 
         public IWhere And(IWhere where)
         {
             if (where == null)
                 throw new NullReferenceException("where");
 
-   
-            where._prevWhere = this;
 
-            if(string.IsNullOrEmpty(_whereClause))
-                _whereClause = ToCurrentWhereClause();
-
-
+            string currentClause = string.IsNullOrEmpty(_whereClause) ? ToCurrentWhereClause() : _whereClause;
             string nextWhereClause = string.IsNullOrEmpty(where._whereClause) ? where.ToCurrentWhereClause() : where._whereClause;
 
-            if(string.IsNullOrEmpty(_whereClause) && string.IsNullOrEmpty(nextWhereClause))
-                return where;
-            else if(string.IsNullOrEmpty(_whereClause))
+            if (string.IsNullOrEmpty(currentClause) && string.IsNullOrEmpty(nextWhereClause))
+                return this;
+            else if (string.IsNullOrEmpty(currentClause))
             {
-                where._whereClause = nextWhereClause;
+                _whereClause = nextWhereClause;
             }
-            else if(string.IsNullOrEmpty(nextWhereClause))
+            else if (string.IsNullOrEmpty(nextWhereClause))
             {
-                where._whereClause = _whereClause;
+                _whereClause = currentClause;
             }
             else
-                where._whereClause = string.Format("{0} and ({1})",_whereClause, nextWhereClause);
+                _whereClause = string.Format("({0} and {1})", currentClause, nextWhereClause);
 
-            return where;
+
+            foreach (var item in where._valueDic)
+            {
+                if (!_valueDic.ContainsKey(item.Key))
+                    _valueDic.Add(item.Key, item.Value);
+            }
+            return this;
         }
         public IWhere Or(IWhere where)
         {
             if (where == null)
                 throw new NullReferenceException("where");
 
-     
-            where._prevWhere = this;
+
 
             if (string.IsNullOrEmpty(_whereClause))
                 _whereClause = ToCurrentWhereClause();
@@ -72,45 +153,14 @@ namespace Dev3Lib.Sql
         {
             get
             {
-                if (string.IsNullOrEmpty(_whereClause))
-                    return ToCurrentWhereClause();
-                else
-                    return _whereClause;
+                return _whereClause;
             }
         }
 
-        public void ToNameValues(IDictionary<string, object> valueDic)
+        public IDictionary<string, object> ToNameValues()
         {
-            if (!valueDic.ContainsKey(ParamName))
-                valueDic.Add(ColumnName, Value);
-
-            if (_prevWhere != null)
-                _prevWhere.ToNameValues(valueDic);
+            return _valueDic;
         }
-        public string ColumnName { get; set; }
-
-        private string _paramName;
-
-        public string ParamName
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_paramName))
-                    return string.Format("@{0}", ColumnName);
-                else
-                    return _paramName;
-            }
-            set
-            {
-                if (value.StartsWith("@"))
-                    _paramName = value;
-                else
-                    _paramName = string.Format("@{0}", value);
-            }
-        }
-        public object Value { get; set; }
-
-        public Comparison Comparison { get; set; }
 
         protected abstract string ToCurrentWhereClause();
 

@@ -10,9 +10,8 @@ namespace Dev3Lib.Test
         [TestMethod]
         public void Test_1_And()
         {
-            string result = new Where { ColumnName = "c1", ParamName = "c1", Comparison = Comparison.Equal, Value = 1 }
-                .And(new Where { ColumnName = "c2", ParamName = "c2", Comparison = Comparison.Equal, Value = 2 })
-                .WhereClause;
+            string result = new Where(1,"c1")
+                .And(new Where(2,"c2")).WhereClause;
 
             Assert.AreEqual("(c1=@c1 AND c2=@c2)", result);
         }

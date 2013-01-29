@@ -105,8 +105,7 @@ namespace Dev3Lib.Sql
 
         private void GenerateParameters(IWhere where, SqlParameterCollection paramColl)
         {
-            Dictionary<string, object> valueDic = new Dictionary<string, object>();
-            where.ToNameValues(valueDic);
+            var valueDic = where.ToNameValues();
 
             List<SqlParameter> list = new List<SqlParameter>(valueDic.Count);
 

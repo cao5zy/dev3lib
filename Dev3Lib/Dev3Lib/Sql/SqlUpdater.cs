@@ -17,13 +17,12 @@ namespace Dev3Lib.Sql
             if (value == null)
                 throw new ArgumentNullException("value");
 
-            Dictionary<string, object> values = new Dictionary<string, object>();
+            var values = where.ToNameValues();
             List<string> columnNames = new List<string>();
             List<string> paramNames = new List<string>();
 
             value.ToNameValues(values);
             value.ToValueClause(columnNames, paramNames);
-            where.ToNameValues(values);
 
             if (columnNames.Count != 0)
             {
