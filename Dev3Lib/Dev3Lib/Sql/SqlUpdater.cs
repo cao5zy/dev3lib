@@ -34,7 +34,7 @@ namespace Dev3Lib.Sql
                     cmd.CommandText = string.Format(_updateFormat,
                         tableName,
                         columnNames.Select((s, i) => string.Format("{0}={1}", s, paramNames[i])).SafeJoinWith(","),
-                        where.WhereClause);
+                        where.Clause);
 
                     foreach (var item in values)
                     {

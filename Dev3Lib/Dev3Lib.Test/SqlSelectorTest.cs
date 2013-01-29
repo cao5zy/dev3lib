@@ -498,10 +498,10 @@ and CurrentCountryId = 13
             Action<ISelector> run = (selector) =>
             {
                 var list = selector.Return<TestItem>(r => new TestItem { }, "select * from tblTBAAupair",
-                    new Where(0, "BlockedFlag")
-                        .And(new Where(1, "AuPairStatusID"))
-                        .And(new Where(1, "GenderId"))
-                        .And(new Where(13, "CurrentCountryId")));
+                    new WhereClause(0, "BlockedFlag")
+                        .And(new WhereClause(1, "AuPairStatusID"))
+                        .And(new WhereClause(1, "GenderId"))
+                        .And(new WhereClause(13, "CurrentCountryId")));
                 Assert.AreEqual(48, list.Count);
             };
 
@@ -523,9 +523,9 @@ and (LastLoggedIn >= '2012-07-13' and LastLoggedIn < '2012-12-12')
 
                 var reader = selector.Read<TestItem>(_convert,
                    "select * from tblTBAAupair",
-                   new Where(1,"AuPairStatusID")
-                   .And(new Where(DateTime.Parse("2012-07-13"), "LastLoggedIn","LastLoggedIn1", Comparison.GreatorThanEqualTo)
-                        .And(new Where(DateTime.Parse("2012-12-12"),"LastLoggedIn","LastLoggedIn2", Comparison.LessThan))));
+                   new WhereClause(1,"AuPairStatusID")
+                   .And(new WhereClause(DateTime.Parse("2012-07-13"), "LastLoggedIn","LastLoggedIn1", Comparison.GreatorThanEqualTo)
+                        .And(new WhereClause(DateTime.Parse("2012-12-12"),"LastLoggedIn","LastLoggedIn2", Comparison.LessThan))));
                 int count = 0;
                 while (reader.MoveNext())
                     count++;

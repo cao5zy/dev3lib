@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Dev3Lib.Sql
 {
-    public abstract class WhereClause
+    public class WhereClause
     {
         private readonly string _columnName, _paramName;
         private string _whereClause;
@@ -41,7 +41,7 @@ namespace Dev3Lib.Sql
 
             _whereClause = ToCurrentWhereClause();
 
-            _valueDic.Add(_paramName, _value);
+            _valueDic.Add(_paramName, ToValue());
         }
 
         public WhereClause(string columnName,
@@ -149,7 +149,7 @@ namespace Dev3Lib.Sql
             return where;
         }
 
-        public string WhereClause
+        public string Clause
         {
             get
             {
@@ -162,7 +162,16 @@ namespace Dev3Lib.Sql
             return _valueDic;
         }
 
-        protected abstract string ToCurrentWhereClause();
+        protected virtual string ToCurrentWhereClause()
+        {
+            return string.Format("{0} {1} {2}", ColumnName, Comparison.ToOperator(), ParamName);
+        }
+
+        protected virtual object ToValue()
+        {
+            return _value;
+        }
+
 
     }
 }

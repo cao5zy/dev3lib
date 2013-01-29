@@ -28,7 +28,7 @@ namespace Dev3Lib.Sql
 
                 string whereClause = string.Empty;
                 if (where != null)
-                    whereClause = string.Format("and {0}", where.WhereClause);
+                    whereClause = string.Format("and {0}", where.Clause);
 
                 cmd.CommandText = string.Format(_selectFormat,
                     sql,
@@ -55,7 +55,7 @@ namespace Dev3Lib.Sql
 
                 string whereClause = string.Empty;
                 if (where != null)
-                    whereClause = string.Format("and {0}", where.WhereClause);
+                    whereClause = string.Format("and {0}", where.Clause);
 
                 cmd.CommandText = string.Format(_selectFormat,
                     sql,
@@ -86,7 +86,7 @@ namespace Dev3Lib.Sql
 
                 string whereClause = string.Empty;
                 if (where != null)
-                    whereClause = string.Format("and {0}", where.WhereClause);
+                    whereClause = string.Format("and {0}", where.Clause);
 
                 cmd.CommandText = string.Format(_selectFormat,
                     sql,
