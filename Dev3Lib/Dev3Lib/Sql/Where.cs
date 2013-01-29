@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Dev3Lib.Sql
 {
-    public sealed class Where : IWhere
+    public sealed class Where : WhereClause
     {
         public Where(object value,
             string columnName,

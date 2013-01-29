@@ -12,7 +12,7 @@ namespace Dev3Lib.Sql
         private SqlTransaction _trans;
         private static readonly string _updateFormat = "update {0} set {1} where 1 = 1 {2}";
 
-        public void Update(string tableName, IUpdateValue value, IWhere where)
+        public void Update(string tableName, IUpdateValue value, WhereClause where)
         {
             if (value == null)
                 throw new ArgumentNullException("value");

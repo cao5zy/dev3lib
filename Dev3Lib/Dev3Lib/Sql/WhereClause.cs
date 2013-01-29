@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Dev3Lib.Sql
 {
-    public abstract class IWhere
+    public abstract class WhereClause
     {
         private readonly string _columnName, _paramName;
         private string _whereClause;
@@ -13,7 +13,7 @@ namespace Dev3Lib.Sql
         private readonly IDictionary<string, object> _valueDic = new Dictionary<string, object>();
         private readonly Comparison _comp;
 
-        public IWhere(string columnName,
+        public WhereClause(string columnName,
             string paramName,
             Comparison comp,
             object value)
@@ -44,7 +44,7 @@ namespace Dev3Lib.Sql
             _valueDic.Add(_paramName, _value);
         }
 
-        public IWhere(string columnName,
+        public WhereClause(string columnName,
             Comparison comp,
             object value)
             : this(columnName, null, comp, value)
@@ -52,7 +52,7 @@ namespace Dev3Lib.Sql
 
         }
 
-        public IWhere(string columnName,
+        public WhereClause(string columnName,
             object value)
             : this(columnName, null, Comparison.Equal, value)
         {
@@ -91,7 +91,7 @@ namespace Dev3Lib.Sql
             }
         }
 
-        public IWhere And(IWhere where)
+        public WhereClause And(WhereClause where)
         {
             if (where == null)
                 throw new NullReferenceException("where");
@@ -121,7 +121,7 @@ namespace Dev3Lib.Sql
             }
             return this;
         }
-        public IWhere Or(IWhere where)
+        public WhereClause Or(WhereClause where)
         {
             if (where == null)
                 throw new NullReferenceException("where");

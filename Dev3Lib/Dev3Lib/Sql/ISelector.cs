@@ -10,14 +10,14 @@ namespace Dev3Lib.Sql
     {
         IEnumerator<T> Read<T>(Converter<IDataReader, T> convert,
             string sql,
-            IWhere where);
+            WhereClause where);
 
         List<T> Return<T>(Converter<IDataReader, T> convert,
             string sql,
-            IWhere where);
+            WhereClause where);
 
         int Count(string sql,
-            IWhere where);
+            WhereClause where);
 
     }
 }

@@ -17,7 +17,7 @@ namespace Dev3Lib.Sql
             _trans = trans;
         }
 
-        public IEnumerator<T> Read<T>(Converter<System.Data.IDataReader, T> convert, string sql, IWhere where)
+        public IEnumerator<T> Read<T>(Converter<System.Data.IDataReader, T> convert, string sql, WhereClause where)
         {
             using (var cmd = _conn.CreateCommand())
             {
@@ -44,7 +44,7 @@ namespace Dev3Lib.Sql
             }
         }
 
-        public List<T> Return<T>(Converter<System.Data.IDataReader, T> convert, string sql, IWhere where)
+        public List<T> Return<T>(Converter<System.Data.IDataReader, T> convert, string sql, WhereClause where)
         {
             using (var cmd = _conn.CreateCommand())
             {
@@ -75,7 +75,7 @@ namespace Dev3Lib.Sql
             }
         }
 
-        public int Count(string sql, IWhere where)
+        public int Count(string sql, WhereClause where)
         {
             using (var cmd = _conn.CreateCommand())
             {
@@ -103,7 +103,7 @@ namespace Dev3Lib.Sql
             }
         }
 
-        private void GenerateParameters(IWhere where, SqlParameterCollection paramColl)
+        private void GenerateParameters(WhereClause where, SqlParameterCollection paramColl)
         {
             var valueDic = where.ToNameValues();
 
