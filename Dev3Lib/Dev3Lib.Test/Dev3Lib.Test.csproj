@@ -69,6 +69,7 @@
     <Compile Include="StringManipulationTest.cs" />
     <Compile Include="SqlSelectorTest.cs" />
     <Compile Include="SqlInsertorTest.cs" />
+    <Compile Include="SqlUpdaterTest.cs" />
     <Compile Include="WhereTest.cs" />
   </ItemGroup>
   <ItemGroup>

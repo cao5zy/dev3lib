@@ -11,10 +11,10 @@ namespace Dev3Lib.Sql
     {
         private SqlConnection _conn;
         private SqlTransaction _trans;
-        private static readonly string _updateFormat = "update {0} set {1} where 1 = 1 {2}";
+        private static readonly string _updateFormat = "update {0} set {1} where 1 = 1 and {2}";
 
         public SqlUpdater(SqlConnection conn,
-            SqlTransaction trans)
+            SqlTransaction trans = null)
         {
             _conn = conn;
             _trans = trans;
@@ -24,6 +24,9 @@ namespace Dev3Lib.Sql
         {
             if(values.IsNullOrEmpty())
                 throw new ArgumentNullException("value");
+
+            if (where == null)
+                throw new ArgumentNullException("where");
 
             var whereValues = where.ToNameValues();
             List<string> columnNames = new List<string>();

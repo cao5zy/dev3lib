@@ -23,24 +23,24 @@ namespace Dev3Lib.Test
 
                 var inserter = builder.Build().Resolve<IInserter>();
 
-                inserter.Insert("tblTBAFeedback", new InsertValue[] {
-                new InsertValue{
+                inserter.Insert("tblTBAFeedback", new SqlValue[] {
+                new SqlValue{
                 ColumnName="AupairId",
                 Value=12543,
                 },
-                new InsertValue{
+                new SqlValue{
                 ColumnName="FeedbackDate",
                 Value=DateTime.Now,
                 },
-                new InsertValue{
+                new SqlValue{
                 ColumnName="FeedbackRanking",
                 Value=1,
                 },
-                new InsertValue{
+                new SqlValue{
                 ColumnName="FeedbackComments",
                 Value="test comments",
                 },
-                new InsertValue{
+                new SqlValue{
                 ColumnName="FeedbackEmailAddress",
                 Value="cest@163.com",
                 }
