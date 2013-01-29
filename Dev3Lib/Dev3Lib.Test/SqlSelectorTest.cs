@@ -387,119 +387,116 @@ namespace Dev3Lib.Test
             public static readonly string _HasSavedDetailsColumn = "HasSavedDetails";
             public bool HasSavedDetails { get; set; }
         }
-
+        #region converter
+        private Converter<IDataReader, TestItem> _convert = reader => new TestItem
+        {
+            AupairId = Convert.IsDBNull(reader["AupairId"]) ? 0 : Convert.ToInt32(reader["AupairId"]),
+            AuPairStatusID = Convert.IsDBNull(reader["AuPairStatusID"]) ? 0 : Convert.ToInt32(reader["AuPairStatusID"]),
+            BlockedFlag = Convert.IsDBNull(reader["BlockedFlag"]) ? false : Convert.ToBoolean(reader["BlockedFlag"]),
+            FirstName = Convert.IsDBNull(reader["FirstName"]) ? string.Empty : Convert.ToString(reader["FirstName"]),
+            LastName = Convert.IsDBNull(reader["LastName"]) ? string.Empty : Convert.ToString(reader["LastName"]),
+            GenderId = Convert.IsDBNull(reader["GenderId"]) ? (short)0 : Convert.ToInt16(reader["GenderId"]),
+            Email = Convert.IsDBNull(reader["Email"]) ? string.Empty : Convert.ToString(reader["Email"]),
+            Password = Convert.IsDBNull(reader["Password"]) ? string.Empty : Convert.ToString(reader["Password"]),
+            CurrentAddressLine1 = Convert.IsDBNull(reader["CurrentAddressLine1"]) ? string.Empty : Convert.ToString(reader["CurrentAddressLine1"]),
+            CurrentAddressLine2 = Convert.IsDBNull(reader["CurrentAddressLine2"]) ? string.Empty : Convert.ToString(reader["CurrentAddressLine2"]),
+            CurrentTown = Convert.IsDBNull(reader["CurrentTown"]) ? string.Empty : Convert.ToString(reader["CurrentTown"]),
+            CurrentState = Convert.IsDBNull(reader["CurrentState"]) ? string.Empty : Convert.ToString(reader["CurrentState"]),
+            CurrentCountryId = Convert.IsDBNull(reader["CurrentCountryId"]) ? (short)0 : Convert.ToInt16(reader["CurrentCountryId"]),
+            PostalAddressLine1 = Convert.IsDBNull(reader["PostalAddressLine1"]) ? string.Empty : Convert.ToString(reader["PostalAddressLine1"]),
+            PostalAddressLine2 = Convert.IsDBNull(reader["PostalAddressLine2"]) ? string.Empty : Convert.ToString(reader["PostalAddressLine2"]),
+            PostalTown = Convert.IsDBNull(reader["PostalTown"]) ? string.Empty : Convert.ToString(reader["PostalTown"]),
+            PostalState = Convert.IsDBNull(reader["PostalState"]) ? string.Empty : Convert.ToString(reader["PostalState"]),
+            PostalCountryId = Convert.IsDBNull(reader["PostalCountryId"]) ? (short)0 : Convert.ToInt16(reader["PostalCountryId"]),
+            NationalityCountryId = Convert.IsDBNull(reader["NationalityCountryId"]) ? (short)0 : Convert.ToInt16(reader["NationalityCountryId"]),
+            BestPhoneNumber = Convert.IsDBNull(reader["BestPhoneNumber"]) ? string.Empty : Convert.ToString(reader["BestPhoneNumber"]),
+            Skypename = Convert.IsDBNull(reader["Skypename"]) ? string.Empty : Convert.ToString(reader["Skypename"]),
+            BestTimeToCall = Convert.IsDBNull(reader["BestTimeToCall"]) ? string.Empty : Convert.ToString(reader["BestTimeToCall"]),
+            FirstMembershipDate = Convert.IsDBNull(reader["FirstMembershipDate"]) ? System.DateTime.Now : Convert.ToDateTime(reader["FirstMembershipDate"]),
+            MembershipStart = Convert.IsDBNull(reader["MembershipStart"]) ? System.DateTime.Now : Convert.ToDateTime(reader["MembershipStart"]),
+            MembershipEnd = Convert.IsDBNull(reader["MembershipEnd"]) ? System.DateTime.Now : Convert.ToDateTime(reader["MembershipEnd"]),
+            CurrentMembershipPremium = Convert.IsDBNull(reader["CurrentMembershipPremium"]) ? false : Convert.ToBoolean(reader["CurrentMembershipPremium"]),
+            PowerSearchStartDate = Convert.IsDBNull(reader["PowerSearchStartDate"]) ? System.DateTime.Now : Convert.ToDateTime(reader["PowerSearchStartDate"]),
+            PowerSearchEndDate = Convert.IsDBNull(reader["PowerSearchEndDate"]) ? System.DateTime.Now : Convert.ToDateTime(reader["PowerSearchEndDate"]),
+            CurrentPowerSearch = Convert.IsDBNull(reader["CurrentPowerSearch"]) ? false : Convert.ToBoolean(reader["CurrentPowerSearch"]),
+            AupairConnect = Convert.IsDBNull(reader["AupairConnect"]) ? false : Convert.ToBoolean(reader["AupairConnect"]),
+            LastPaymentMethod = Convert.IsDBNull(reader["LastPaymentMethod"]) ? string.Empty : Convert.ToString(reader["LastPaymentMethod"]),
+            LastLoggedIn = Convert.IsDBNull(reader["LastLoggedIn"]) ? System.DateTime.Now : Convert.ToDateTime(reader["LastLoggedIn"]),
+            AvailableToStartFrom = Convert.IsDBNull(reader["AvailableToStartFrom"]) ? System.DateTime.Now : Convert.ToDateTime(reader["AvailableToStartFrom"]),
+            AvailableToStartTo = Convert.IsDBNull(reader["AvailableToStartTo"]) ? System.DateTime.Now : Convert.ToDateTime(reader["AvailableToStartTo"]),
+            AvailableDurationFromId = Convert.IsDBNull(reader["AvailableDurationFromId"]) ? (short)0 : Convert.ToInt16(reader["AvailableDurationFromId"]),
+            AvailableDurationToId = Convert.IsDBNull(reader["AvailableDurationToId"]) ? (short)0 : Convert.ToInt16(reader["AvailableDurationToId"]),
+            MustBeHomeByDate = Convert.IsDBNull(reader["MustBeHomeByDate"]) ? System.DateTime.Now : Convert.ToDateTime(reader["MustBeHomeByDate"]),
+            Tattoos = Convert.IsDBNull(reader["Tattoos"]) ? false : Convert.ToBoolean(reader["Tattoos"]),
+            Piercings = Convert.IsDBNull(reader["Piercings"]) ? false : Convert.ToBoolean(reader["Piercings"]),
+            TattooInfo = Convert.IsDBNull(reader["TattooInfo"]) ? string.Empty : Convert.ToString(reader["TattooInfo"]),
+            PiercingInfo = Convert.IsDBNull(reader["PiercingInfo"]) ? string.Empty : Convert.ToString(reader["PiercingInfo"]),
+            CanSwim = Convert.IsDBNull(reader["CanSwim"]) ? false : Convert.ToBoolean(reader["CanSwim"]),
+            HasFirstAidTraining = Convert.IsDBNull(reader["HasFirstAidTraining"]) ? false : Convert.ToBoolean(reader["HasFirstAidTraining"]),
+            IsHappyLookAfterPets = Convert.IsDBNull(reader["IsHappyLookAfterPets"]) ? false : Convert.ToBoolean(reader["IsHappyLookAfterPets"]),
+            IsHappyLiveWithPets = Convert.IsDBNull(reader["IsHappyLiveWithPets"]) ? false : Convert.ToBoolean(reader["IsHappyLiveWithPets"]),
+            CookingSkillLevelId = Convert.IsDBNull(reader["CookingSkillLevelId"]) ? (short)0 : Convert.ToInt16(reader["CookingSkillLevelId"]),
+            LightHousework = Convert.IsDBNull(reader["LightHousework"]) ? false : Convert.ToBoolean(reader["LightHousework"]),
+            Cleaning = Convert.IsDBNull(reader["Cleaning"]) ? false : Convert.ToBoolean(reader["Cleaning"]),
+            ShoppingErrands = Convert.IsDBNull(reader["ShoppingErrands"]) ? false : Convert.ToBoolean(reader["ShoppingErrands"]),
+            ElderlyCare = Convert.IsDBNull(reader["ElderlyCare"]) ? false : Convert.ToBoolean(reader["ElderlyCare"]),
+            FamilyMustHavePhoto = Convert.IsDBNull(reader["FamilyMustHavePhoto"]) ? false : Convert.ToBoolean(reader["FamilyMustHavePhoto"]),
+            CanDoWebcam = Convert.IsDBNull(reader["CanDoWebcam"]) ? false : Convert.ToBoolean(reader["CanDoWebcam"]),
+            FamilyMustDoWebcam = Convert.IsDBNull(reader["FamilyMustDoWebcam"]) ? false : Convert.ToBoolean(reader["FamilyMustDoWebcam"]),
+            AupairCouple = Convert.IsDBNull(reader["AupairCouple"]) ? false : Convert.ToBoolean(reader["AupairCouple"]),
+            CareForUpToChildrenId = Convert.IsDBNull(reader["CareForUpToChildrenId"]) ? (short)0 : Convert.ToInt16(reader["CareForUpToChildrenId"]),
+            PrimaryReligionId = Convert.IsDBNull(reader["PrimaryReligionId"]) ? (short)0 : Convert.ToInt16(reader["PrimaryReligionId"]),
+            ReligionImportant = Convert.IsDBNull(reader["ReligionImportant"]) ? false : Convert.ToBoolean(reader["ReligionImportant"]),
+            HasDriversLicence = Convert.IsDBNull(reader["HasDriversLicence"]) ? false : Convert.ToBoolean(reader["HasDriversLicence"]),
+            DriverSkillLevelId = Convert.IsDBNull(reader["DriverSkillLevelId"]) ? (short)0 : Convert.ToInt16(reader["DriverSkillLevelId"]),
+            IsASmoker = Convert.IsDBNull(reader["IsASmoker"]) ? false : Convert.ToBoolean(reader["IsASmoker"]),
+            WorkInSmokingHouse = Convert.IsDBNull(reader["WorkInSmokingHouse"]) ? false : Convert.ToBoolean(reader["WorkInSmokingHouse"]),
+            DisabledChildren = Convert.IsDBNull(reader["DisabledChildren"]) ? false : Convert.ToBoolean(reader["DisabledChildren"]),
+            InfantCare = Convert.IsDBNull(reader["InfantCare"]) ? false : Convert.ToBoolean(reader["InfantCare"]),
+            SingleMotherId = Convert.IsDBNull(reader["SingleMotherId"]) ? (short)0 : Convert.ToInt16(reader["SingleMotherId"]),
+            SingleFatherId = Convert.IsDBNull(reader["SingleFatherId"]) ? (short)0 : Convert.ToInt16(reader["SingleFatherId"]),
+            FamilyFromAgeId = Convert.IsDBNull(reader["FamilyFromAgeId"]) ? (short)0 : Convert.ToInt16(reader["FamilyFromAgeId"]),
+            FamilyToAgeId = Convert.IsDBNull(reader["FamilyToAgeId"]) ? (short)0 : Convert.ToInt16(reader["FamilyToAgeId"]),
+            AupairExperienceId = Convert.IsDBNull(reader["AupairExperienceId"]) ? (short)0 : Convert.ToInt16(reader["AupairExperienceId"]),
+            AupairEducationId = Convert.IsDBNull(reader["AupairEducationId"]) ? (short)0 : Convert.ToInt16(reader["AupairEducationId"]),
+            HaveBeenAupairBefore = Convert.IsDBNull(reader["HaveBeenAupairBefore"]) ? false : Convert.ToBoolean(reader["HaveBeenAupairBefore"]),
+            DietaryDescription = Convert.IsDBNull(reader["DietaryDescription"]) ? string.Empty : Convert.ToString(reader["DietaryDescription"]),
+            PersonalInformationMessage = Convert.IsDBNull(reader["PersonalInformationMessage"]) ? string.Empty : Convert.ToString(reader["PersonalInformationMessage"]),
+            FamilyMessage = Convert.IsDBNull(reader["FamilyMessage"]) ? string.Empty : Convert.ToString(reader["FamilyMessage"]),
+            DisplayPhoneToPremiumMembers = Convert.IsDBNull(reader["DisplayPhoneToPremiumMembers"]) ? false : Convert.ToBoolean(reader["DisplayPhoneToPremiumMembers"]),
+            ShareEmailWithConnect = Convert.IsDBNull(reader["ShareEmailWithConnect"]) ? false : Convert.ToBoolean(reader["ShareEmailWithConnect"]),
+            HowHear = Convert.IsDBNull(reader["HowHear"]) ? string.Empty : Convert.ToString(reader["HowHear"]),
+            RegistrationStatus = Convert.IsDBNull(reader["RegistrationStatus"]) ? string.Empty : Convert.ToString(reader["RegistrationStatus"]),
+            CurrentPostcode = Convert.IsDBNull(reader["CurrentPostcode"]) ? string.Empty : Convert.ToString(reader["CurrentPostcode"]),
+            PostalPostcode = Convert.IsDBNull(reader["PostalPostcode"]) ? string.Empty : Convert.ToString(reader["PostalPostcode"]),
+            Photo1 = Convert.IsDBNull(reader["Photo1"]) ? string.Empty : Convert.ToString(reader["Photo1"]),
+            Photo2 = Convert.IsDBNull(reader["Photo2"]) ? string.Empty : Convert.ToString(reader["Photo2"]),
+            Photo3 = Convert.IsDBNull(reader["Photo3"]) ? string.Empty : Convert.ToString(reader["Photo3"]),
+            Photo4 = Convert.IsDBNull(reader["Photo4"]) ? string.Empty : Convert.ToString(reader["Photo4"]),
+            Photo5 = Convert.IsDBNull(reader["Photo5"]) ? string.Empty : Convert.ToString(reader["Photo5"]),
+            Photo6 = Convert.IsDBNull(reader["Photo6"]) ? string.Empty : Convert.ToString(reader["Photo6"]),
+            HomeCountryID = Convert.IsDBNull(reader["HomeCountryID"]) ? (short)0 : Convert.ToInt16(reader["HomeCountryID"]),
+            HomeCity = Convert.IsDBNull(reader["HomeCity"]) ? string.Empty : Convert.ToString(reader["HomeCity"]),
+            DateOfBirth = Convert.IsDBNull(reader["DateOfBirth"]) ? System.DateTime.Now : Convert.ToDateTime(reader["DateOfBirth"]),
+            WillCook = Convert.IsDBNull(reader["WillCook"]) ? false : Convert.ToBoolean(reader["WillCook"]),
+            TimezoneName = Convert.IsDBNull(reader["TimezoneName"]) ? string.Empty : Convert.ToString(reader["TimezoneName"]),
+            Loc_Latitude = Convert.IsDBNull(reader["Loc_Latitude"]) ? 0 : Convert.ToDecimal(reader["Loc_Latitude"]),
+            Loc_Longitude = Convert.IsDBNull(reader["Loc_Longitude"]) ? 0 : Convert.ToDecimal(reader["Loc_Longitude"]),
+            TimezoneOffset = Convert.IsDBNull(reader["TimezoneOffset"]) ? 0 : Convert.ToDecimal(reader["TimezoneOffset"]),
+            HasSavedDetails = Convert.IsDBNull(reader["HasSavedDetails"]) ? false : Convert.ToBoolean(reader["HasSavedDetails"]),
+        };
+        #endregion
         [TestMethod]
         public void Select_Test()
         {
-            ContainerBuilder builder = new ContainerBuilder();
-            builder.RegisterType<SqlSelector>().As<ISelector>();
-
-            using (SqlConnection conn = new SqlConnection("Initial Catalog=tbaDATA;Data Source=(local)\\Sqlexpress;Integrated Security=true"))
+            /* select * from tblTBAAupair 
+where BlockedFlag = 0
+and AuPairStatusID = 1
+and GenderId = 1
+and CurrentCountryId = 13
+             * */
+            Action<ISelector> run = (selector) =>
             {
-                conn.Open();
-
-                builder.RegisterInstance<SqlConnection>(conn).ExternallyOwned();
-
-                var selector = builder.Build().Resolve<ISelector>();
-
-                Converter<IDataReader, TestItem> convert = reader => new TestItem
-                {
-                    AupairId = Convert.IsDBNull(reader["AupairId"]) ? 0 : Convert.ToInt32(reader["AupairId"]),
-                    AuPairStatusID = Convert.IsDBNull(reader["AuPairStatusID"]) ? 0 : Convert.ToInt32(reader["AuPairStatusID"]),
-                    BlockedFlag = Convert.IsDBNull(reader["BlockedFlag"]) ? false : Convert.ToBoolean(reader["BlockedFlag"]),
-                    FirstName = Convert.IsDBNull(reader["FirstName"]) ? string.Empty : Convert.ToString(reader["FirstName"]),
-                    LastName = Convert.IsDBNull(reader["LastName"]) ? string.Empty : Convert.ToString(reader["LastName"]),
-                    GenderId = Convert.IsDBNull(reader["GenderId"]) ? (short)0 : Convert.ToInt16(reader["GenderId"]),
-                    Email = Convert.IsDBNull(reader["Email"]) ? string.Empty : Convert.ToString(reader["Email"]),
-                    Password = Convert.IsDBNull(reader["Password"]) ? string.Empty : Convert.ToString(reader["Password"]),
-                    CurrentAddressLine1 = Convert.IsDBNull(reader["CurrentAddressLine1"]) ? string.Empty : Convert.ToString(reader["CurrentAddressLine1"]),
-                    CurrentAddressLine2 = Convert.IsDBNull(reader["CurrentAddressLine2"]) ? string.Empty : Convert.ToString(reader["CurrentAddressLine2"]),
-                    CurrentTown = Convert.IsDBNull(reader["CurrentTown"]) ? string.Empty : Convert.ToString(reader["CurrentTown"]),
-                    CurrentState = Convert.IsDBNull(reader["CurrentState"]) ? string.Empty : Convert.ToString(reader["CurrentState"]),
-                    CurrentCountryId = Convert.IsDBNull(reader["CurrentCountryId"]) ? (short)0 : Convert.ToInt16(reader["CurrentCountryId"]),
-                    PostalAddressLine1 = Convert.IsDBNull(reader["PostalAddressLine1"]) ? string.Empty : Convert.ToString(reader["PostalAddressLine1"]),
-                    PostalAddressLine2 = Convert.IsDBNull(reader["PostalAddressLine2"]) ? string.Empty : Convert.ToString(reader["PostalAddressLine2"]),
-                    PostalTown = Convert.IsDBNull(reader["PostalTown"]) ? string.Empty : Convert.ToString(reader["PostalTown"]),
-                    PostalState = Convert.IsDBNull(reader["PostalState"]) ? string.Empty : Convert.ToString(reader["PostalState"]),
-                    PostalCountryId = Convert.IsDBNull(reader["PostalCountryId"]) ? (short)0 : Convert.ToInt16(reader["PostalCountryId"]),
-                    NationalityCountryId = Convert.IsDBNull(reader["NationalityCountryId"]) ? (short)0 : Convert.ToInt16(reader["NationalityCountryId"]),
-                    BestPhoneNumber = Convert.IsDBNull(reader["BestPhoneNumber"]) ? string.Empty : Convert.ToString(reader["BestPhoneNumber"]),
-                    Skypename = Convert.IsDBNull(reader["Skypename"]) ? string.Empty : Convert.ToString(reader["Skypename"]),
-                    BestTimeToCall = Convert.IsDBNull(reader["BestTimeToCall"]) ? string.Empty : Convert.ToString(reader["BestTimeToCall"]),
-                    FirstMembershipDate = Convert.IsDBNull(reader["FirstMembershipDate"]) ? System.DateTime.Now : Convert.ToDateTime(reader["FirstMembershipDate"]),
-                    MembershipStart = Convert.IsDBNull(reader["MembershipStart"]) ? System.DateTime.Now : Convert.ToDateTime(reader["MembershipStart"]),
-                    MembershipEnd = Convert.IsDBNull(reader["MembershipEnd"]) ? System.DateTime.Now : Convert.ToDateTime(reader["MembershipEnd"]),
-                    CurrentMembershipPremium = Convert.IsDBNull(reader["CurrentMembershipPremium"]) ? false : Convert.ToBoolean(reader["CurrentMembershipPremium"]),
-                    PowerSearchStartDate = Convert.IsDBNull(reader["PowerSearchStartDate"]) ? System.DateTime.Now : Convert.ToDateTime(reader["PowerSearchStartDate"]),
-                    PowerSearchEndDate = Convert.IsDBNull(reader["PowerSearchEndDate"]) ? System.DateTime.Now : Convert.ToDateTime(reader["PowerSearchEndDate"]),
-                    CurrentPowerSearch = Convert.IsDBNull(reader["CurrentPowerSearch"]) ? false : Convert.ToBoolean(reader["CurrentPowerSearch"]),
-                    AupairConnect = Convert.IsDBNull(reader["AupairConnect"]) ? false : Convert.ToBoolean(reader["AupairConnect"]),
-                    LastPaymentMethod = Convert.IsDBNull(reader["LastPaymentMethod"]) ? string.Empty : Convert.ToString(reader["LastPaymentMethod"]),
-                    LastLoggedIn = Convert.IsDBNull(reader["LastLoggedIn"]) ? System.DateTime.Now : Convert.ToDateTime(reader["LastLoggedIn"]),
-                    AvailableToStartFrom = Convert.IsDBNull(reader["AvailableToStartFrom"]) ? System.DateTime.Now : Convert.ToDateTime(reader["AvailableToStartFrom"]),
-                    AvailableToStartTo = Convert.IsDBNull(reader["AvailableToStartTo"]) ? System.DateTime.Now : Convert.ToDateTime(reader["AvailableToStartTo"]),
-                    AvailableDurationFromId = Convert.IsDBNull(reader["AvailableDurationFromId"]) ? (short)0 : Convert.ToInt16(reader["AvailableDurationFromId"]),
-                    AvailableDurationToId = Convert.IsDBNull(reader["AvailableDurationToId"]) ? (short)0 : Convert.ToInt16(reader["AvailableDurationToId"]),
-                    MustBeHomeByDate = Convert.IsDBNull(reader["MustBeHomeByDate"]) ? System.DateTime.Now : Convert.ToDateTime(reader["MustBeHomeByDate"]),
-                    Tattoos = Convert.IsDBNull(reader["Tattoos"]) ? false : Convert.ToBoolean(reader["Tattoos"]),
-                    Piercings = Convert.IsDBNull(reader["Piercings"]) ? false : Convert.ToBoolean(reader["Piercings"]),
-                    TattooInfo = Convert.IsDBNull(reader["TattooInfo"]) ? string.Empty : Convert.ToString(reader["TattooInfo"]),
-                    PiercingInfo = Convert.IsDBNull(reader["PiercingInfo"]) ? string.Empty : Convert.ToString(reader["PiercingInfo"]),
-                    CanSwim = Convert.IsDBNull(reader["CanSwim"]) ? false : Convert.ToBoolean(reader["CanSwim"]),
-                    HasFirstAidTraining = Convert.IsDBNull(reader["HasFirstAidTraining"]) ? false : Convert.ToBoolean(reader["HasFirstAidTraining"]),
-                    IsHappyLookAfterPets = Convert.IsDBNull(reader["IsHappyLookAfterPets"]) ? false : Convert.ToBoolean(reader["IsHappyLookAfterPets"]),
-                    IsHappyLiveWithPets = Convert.IsDBNull(reader["IsHappyLiveWithPets"]) ? false : Convert.ToBoolean(reader["IsHappyLiveWithPets"]),
-                    CookingSkillLevelId = Convert.IsDBNull(reader["CookingSkillLevelId"]) ? (short)0 : Convert.ToInt16(reader["CookingSkillLevelId"]),
-                    LightHousework = Convert.IsDBNull(reader["LightHousework"]) ? false : Convert.ToBoolean(reader["LightHousework"]),
-                    Cleaning = Convert.IsDBNull(reader["Cleaning"]) ? false : Convert.ToBoolean(reader["Cleaning"]),
-                    ShoppingErrands = Convert.IsDBNull(reader["ShoppingErrands"]) ? false : Convert.ToBoolean(reader["ShoppingErrands"]),
-                    ElderlyCare = Convert.IsDBNull(reader["ElderlyCare"]) ? false : Convert.ToBoolean(reader["ElderlyCare"]),
-                    FamilyMustHavePhoto = Convert.IsDBNull(reader["FamilyMustHavePhoto"]) ? false : Convert.ToBoolean(reader["FamilyMustHavePhoto"]),
-                    CanDoWebcam = Convert.IsDBNull(reader["CanDoWebcam"]) ? false : Convert.ToBoolean(reader["CanDoWebcam"]),
-                    FamilyMustDoWebcam = Convert.IsDBNull(reader["FamilyMustDoWebcam"]) ? false : Convert.ToBoolean(reader["FamilyMustDoWebcam"]),
-                    AupairCouple = Convert.IsDBNull(reader["AupairCouple"]) ? false : Convert.ToBoolean(reader["AupairCouple"]),
-                    CareForUpToChildrenId = Convert.IsDBNull(reader["CareForUpToChildrenId"]) ? (short)0 : Convert.ToInt16(reader["CareForUpToChildrenId"]),
-                    PrimaryReligionId = Convert.IsDBNull(reader["PrimaryReligionId"]) ? (short)0 : Convert.ToInt16(reader["PrimaryReligionId"]),
-                    ReligionImportant = Convert.IsDBNull(reader["ReligionImportant"]) ? false : Convert.ToBoolean(reader["ReligionImportant"]),
-                    HasDriversLicence = Convert.IsDBNull(reader["HasDriversLicence"]) ? false : Convert.ToBoolean(reader["HasDriversLicence"]),
-                    DriverSkillLevelId = Convert.IsDBNull(reader["DriverSkillLevelId"]) ? (short)0 : Convert.ToInt16(reader["DriverSkillLevelId"]),
-                    IsASmoker = Convert.IsDBNull(reader["IsASmoker"]) ? false : Convert.ToBoolean(reader["IsASmoker"]),
-                    WorkInSmokingHouse = Convert.IsDBNull(reader["WorkInSmokingHouse"]) ? false : Convert.ToBoolean(reader["WorkInSmokingHouse"]),
-                    DisabledChildren = Convert.IsDBNull(reader["DisabledChildren"]) ? false : Convert.ToBoolean(reader["DisabledChildren"]),
-                    InfantCare = Convert.IsDBNull(reader["InfantCare"]) ? false : Convert.ToBoolean(reader["InfantCare"]),
-                    SingleMotherId = Convert.IsDBNull(reader["SingleMotherId"]) ? (short)0 : Convert.ToInt16(reader["SingleMotherId"]),
-                    SingleFatherId = Convert.IsDBNull(reader["SingleFatherId"]) ? (short)0 : Convert.ToInt16(reader["SingleFatherId"]),
-                    FamilyFromAgeId = Convert.IsDBNull(reader["FamilyFromAgeId"]) ? (short)0 : Convert.ToInt16(reader["FamilyFromAgeId"]),
-                    FamilyToAgeId = Convert.IsDBNull(reader["FamilyToAgeId"]) ? (short)0 : Convert.ToInt16(reader["FamilyToAgeId"]),
-                    AupairExperienceId = Convert.IsDBNull(reader["AupairExperienceId"]) ? (short)0 : Convert.ToInt16(reader["AupairExperienceId"]),
-                    AupairEducationId = Convert.IsDBNull(reader["AupairEducationId"]) ? (short)0 : Convert.ToInt16(reader["AupairEducationId"]),
-                    HaveBeenAupairBefore = Convert.IsDBNull(reader["HaveBeenAupairBefore"]) ? false : Convert.ToBoolean(reader["HaveBeenAupairBefore"]),
-                    DietaryDescription = Convert.IsDBNull(reader["DietaryDescription"]) ? string.Empty : Convert.ToString(reader["DietaryDescription"]),
-                    PersonalInformationMessage = Convert.IsDBNull(reader["PersonalInformationMessage"]) ? string.Empty : Convert.ToString(reader["PersonalInformationMessage"]),
-                    FamilyMessage = Convert.IsDBNull(reader["FamilyMessage"]) ? string.Empty : Convert.ToString(reader["FamilyMessage"]),
-                    DisplayPhoneToPremiumMembers = Convert.IsDBNull(reader["DisplayPhoneToPremiumMembers"]) ? false : Convert.ToBoolean(reader["DisplayPhoneToPremiumMembers"]),
-                    ShareEmailWithConnect = Convert.IsDBNull(reader["ShareEmailWithConnect"]) ? false : Convert.ToBoolean(reader["ShareEmailWithConnect"]),
-                    HowHear = Convert.IsDBNull(reader["HowHear"]) ? string.Empty : Convert.ToString(reader["HowHear"]),
-                    RegistrationStatus = Convert.IsDBNull(reader["RegistrationStatus"]) ? string.Empty : Convert.ToString(reader["RegistrationStatus"]),
-                    CurrentPostcode = Convert.IsDBNull(reader["CurrentPostcode"]) ? string.Empty : Convert.ToString(reader["CurrentPostcode"]),
-                    PostalPostcode = Convert.IsDBNull(reader["PostalPostcode"]) ? string.Empty : Convert.ToString(reader["PostalPostcode"]),
-                    Photo1 = Convert.IsDBNull(reader["Photo1"]) ? string.Empty : Convert.ToString(reader["Photo1"]),
-                    Photo2 = Convert.IsDBNull(reader["Photo2"]) ? string.Empty : Convert.ToString(reader["Photo2"]),
-                    Photo3 = Convert.IsDBNull(reader["Photo3"]) ? string.Empty : Convert.ToString(reader["Photo3"]),
-                    Photo4 = Convert.IsDBNull(reader["Photo4"]) ? string.Empty : Convert.ToString(reader["Photo4"]),
-                    Photo5 = Convert.IsDBNull(reader["Photo5"]) ? string.Empty : Convert.ToString(reader["Photo5"]),
-                    Photo6 = Convert.IsDBNull(reader["Photo6"]) ? string.Empty : Convert.ToString(reader["Photo6"]),
-                    HomeCountryID = Convert.IsDBNull(reader["HomeCountryID"]) ? (short)0 : Convert.ToInt16(reader["HomeCountryID"]),
-                    HomeCity = Convert.IsDBNull(reader["HomeCity"]) ? string.Empty : Convert.ToString(reader["HomeCity"]),
-                    DateOfBirth = Convert.IsDBNull(reader["DateOfBirth"]) ? System.DateTime.Now : Convert.ToDateTime(reader["DateOfBirth"]),
-                    WillCook = Convert.IsDBNull(reader["WillCook"]) ? false : Convert.ToBoolean(reader["WillCook"]),
-                    TimezoneName = Convert.IsDBNull(reader["TimezoneName"]) ? string.Empty : Convert.ToString(reader["TimezoneName"]),
-                    Loc_Latitude = Convert.IsDBNull(reader["Loc_Latitude"]) ? 0 : Convert.ToDecimal(reader["Loc_Latitude"]),
-                    Loc_Longitude = Convert.IsDBNull(reader["Loc_Longitude"]) ? 0 : Convert.ToDecimal(reader["Loc_Longitude"]),
-                    TimezoneOffset = Convert.IsDBNull(reader["TimezoneOffset"]) ? 0 : Convert.ToDecimal(reader["TimezoneOffset"]),
-                    HasSavedDetails = Convert.IsDBNull(reader["HasSavedDetails"]) ? false : Convert.ToBoolean(reader["HasSavedDetails"]),
-                };
-
                 var list = selector.Return<TestItem>(r => new TestItem { }, "select * from tblTBAAupair",
                     new Where
                     {
@@ -514,9 +511,88 @@ namespace Dev3Lib.Test
                             ParamName = "AuPairStatusID",
                             Comparison = Comparison.Equal,
                             Value = 1
+                        })
+                        .And(
+                        new Where
+                        {
+                            ColumnName = "GenderId",
+                            Value = 1,
+                        }
+                        )
+                        .And(
+                        new Where
+                        {
+                            ColumnName = "CurrentCountryId",
+                            Value = 13
                         }));
 
-                Assert.AreEqual(1530, list.Count);
+                Assert.AreEqual(48, list.Count);
+            };
+
+            RunSql(run);
+        }
+
+
+        [TestMethod]
+        public void Select_With_Composite_Clause()
+        {
+            /*
+             * select * from tblTBAAupair 
+where AuPairStatusID = 1
+and (LastLoggedIn >= '2012-07-13' and LastLoggedIn < '2012-12-12')
+             * */
+
+            Action<ISelector> run = (selector) =>
+            {
+
+                var reader = selector.Read<TestItem>(_convert,
+                   "select * from tblTBAAupair",
+                   new Where
+                   {
+                       ColumnName = "AuPairStatusID",
+                       Value = 1,
+                   }.And(
+                   new Where
+                   {
+                       ColumnName = "LastLoggedIn",
+                       ParamName = "LastLoggedIn1",
+                       Value = DateTime.Parse("2012-07-13"),
+                       Comparison = Comparison.GreatorThanEqualTo
+                   }
+                   .And(new Where
+                   {
+                       ColumnName = "LastLoggedIn",
+                       ParamName = "LastLoggedIn2",
+                       Value = DateTime.Parse("2012-12-12"),
+                       Comparison = Comparison.LessThan
+                   })
+                   ));
+
+                int count = 0;
+                while (reader.MoveNext())
+                    count++;
+
+                Assert.AreEqual(1565, count);
+            };
+
+            RunSql(run);
+        }
+
+        private void RunSql(Action<ISelector> run)
+        {
+            ContainerBuilder builder = new ContainerBuilder();
+            builder.RegisterType<SqlSelector>().As<ISelector>();
+
+            using (SqlConnection conn = new SqlConnection("Initial Catalog=tbaDATA;Data Source=(local)\\Sqlexpress;Integrated Security=true"))
+            {
+                conn.Open();
+
+                builder.RegisterInstance<SqlConnection>(conn).ExternallyOwned();
+
+                var selector = builder.Build().Resolve<ISelector>();
+
+                run(selector);
+
             }
         }
     }

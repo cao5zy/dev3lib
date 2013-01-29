@@ -12,9 +12,6 @@ namespace Dev3Lib.Sql
 
         public IWhere And(IWhere where)
         {
-            if (_prevWhere != null)
-                throw new InvalidOperationException("only one combination instance is allowed");
-
             if (where == null)
                 throw new NullReferenceException("where");
 
@@ -24,7 +21,8 @@ namespace Dev3Lib.Sql
             if(string.IsNullOrEmpty(_whereClause))
                 _whereClause = ToCurrentWhereClause();
 
-            string nextWhereClause = where.ToCurrentWhereClause();
+
+            string nextWhereClause = string.IsNullOrEmpty(where._whereClause) ? where.ToCurrentWhereClause() : where._whereClause;
 
             if(string.IsNullOrEmpty(_whereClause) && string.IsNullOrEmpty(nextWhereClause))
                 return where;
@@ -37,15 +35,12 @@ namespace Dev3Lib.Sql
                 where._whereClause = _whereClause;
             }
             else
-                where._whereClause = string.Format("{0} and {1}",_whereClause, nextWhereClause);
+                where._whereClause = string.Format("{0} and ({1})",_whereClause, nextWhereClause);
 
             return where;
         }
         public IWhere Or(IWhere where)
         {
-            if (_prevWhere != null)
-                throw new InvalidOperationException("only one combination instance is allowed");
-
             if (where == null)
                 throw new NullReferenceException("where");
 
@@ -68,7 +63,7 @@ namespace Dev3Lib.Sql
                 where._whereClause = _whereClause;
             }
             else
-                where._whereClause = string.Format("{0} or {1}", _whereClause, nextWhereClause);
+                where._whereClause = string.Format("{0} or ({1})", _whereClause, nextWhereClause);
 
             return where;
         }
