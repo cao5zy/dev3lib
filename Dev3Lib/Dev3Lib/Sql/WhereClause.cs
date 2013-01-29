@@ -7,16 +7,20 @@ namespace Dev3Lib.Sql
 {
     public class WhereClause
     {
+        /*
+         * where clause is composed at the Add and Or method
+         * */
         private readonly string _columnName, _paramName;
         private string _whereClause;
         private readonly object _value;
         private readonly IDictionary<string, object> _valueDic = new Dictionary<string, object>();
         private readonly Comparison _comp;
 
-        public WhereClause(string columnName,
-            string paramName,
-            Comparison comp,
-            object value)
+        public WhereClause(object value,
+            string columnName,
+            string paramName = null,
+            Comparison comp = Sql.Comparison.Equal
+            )
         {
             if (string.IsNullOrEmpty(columnName))
                 throw new ArgumentNullException(columnName);
@@ -41,23 +45,27 @@ namespace Dev3Lib.Sql
 
             _whereClause = ToCurrentWhereClause();
 
-            _valueDic.Add(_paramName, ToValue());
+            var values = ToValues();
+            int index = 0;
+            foreach (var val in values)
+            {
+                if (index == 0)
+                {
+                    _valueDic.Add(_paramName, val);
+                }
+                else
+                {
+                    _valueDic.Add(_paramName + index.ToString(), val);
+                }
+
+                index++;
+            }
         }
 
-        public WhereClause(string columnName,
-            Comparison comp,
-            object value)
-            : this(columnName, null, comp, value)
-        {
-
-        }
-
-        public WhereClause(string columnName,
-            object value)
-            : this(columnName, null, Comparison.Equal, value)
-        {
-
-        }
+        public WhereClause(object value,
+            string columnName,
+            Comparison comp)
+            : this(value, columnName, null, comp) { }
 
         protected string ColumnName
         {
@@ -127,26 +135,29 @@ namespace Dev3Lib.Sql
                 throw new NullReferenceException("where");
 
 
+            string currentClause = string.IsNullOrEmpty(_whereClause) ? ToCurrentWhereClause() : _whereClause;
+            string nextWhereClause = string.IsNullOrEmpty(where._whereClause) ? where.ToCurrentWhereClause() : where._whereClause;
 
-            if (string.IsNullOrEmpty(_whereClause))
-                _whereClause = ToCurrentWhereClause();
-
-            string nextWhereClause = where.ToCurrentWhereClause();
-
-            if (string.IsNullOrEmpty(_whereClause) && string.IsNullOrEmpty(nextWhereClause))
-                return where;
-            else if (string.IsNullOrEmpty(_whereClause))
+            if (string.IsNullOrEmpty(currentClause) && string.IsNullOrEmpty(nextWhereClause))
+                return this;
+            else if (string.IsNullOrEmpty(currentClause))
             {
-                where._whereClause = nextWhereClause;
+                _whereClause = nextWhereClause;
             }
             else if (string.IsNullOrEmpty(nextWhereClause))
             {
-                where._whereClause = _whereClause;
+                _whereClause = currentClause;
             }
             else
-                where._whereClause = string.Format("{0} or ({1})", _whereClause, nextWhereClause);
+                _whereClause = string.Format("({0} and {1})", currentClause, nextWhereClause);
 
-            return where;
+
+            foreach (var item in where._valueDic)
+            {
+                if (!_valueDic.ContainsKey(item.Key))
+                    _valueDic.Add(item.Key, item.Value);
+            }
+            return this;
         }
 
         public string Clause
@@ -167,9 +178,9 @@ namespace Dev3Lib.Sql
             return string.Format("{0} {1} {2}", ColumnName, Comparison.ToOperator(), ParamName);
         }
 
-        protected virtual object ToValue()
+        protected virtual IEnumerable<object> ToValues()
         {
-            return _value;
+            return new object[] { _value };
         }
 
 

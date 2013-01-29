@@ -536,6 +536,34 @@ and (LastLoggedIn >= '2012-07-13' and LastLoggedIn < '2012-12-12')
             RunSql(run);
         }
 
+
+        [TestMethod]
+        public void Select_With_In_Clause()
+        {
+            /*
+             * select * from tblTBAAupair
+where BlockedFlag = 0
+and AuPairStatusID in (1,2,3)
+and LastLoggedIn > '2012-9-1'
+             * */
+
+            Action<ISelector> run = (selector) =>
+            {
+
+                var reader = selector.Read<TestItem>(_convert,
+                   "select * from tblTBAAupair",
+                   new WhereClause(0, "BlockedFlag")
+                   .And(new InClause(new object[] { 1, 2, 3 }, "AuPairStatusID"))
+                    .And(new WhereClause(DateTime.Parse("2012-9-1"), "LastLoggedIn", Comparison.GreatorThan)));
+                int count = 0;
+                while (reader.MoveNext())
+                    count++;
+
+                Assert.AreEqual(1194, count);
+            };
+
+            RunSql(run);
+        }
         private void RunSql(Action<ISelector> run)
         {
             ContainerBuilder builder = new ContainerBuilder();
