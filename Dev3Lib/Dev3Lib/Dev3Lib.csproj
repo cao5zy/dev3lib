@@ -56,7 +56,7 @@
     <Compile Include="Sections\LingualSection.cs" />
     <Compile Include="Sql\IInserter.cs" />
     <Compile Include="Sql\InClause.cs" />
-    <Compile Include="Sql\InsertValue.cs" />
+    <Compile Include="Sql\SqlValue.cs" />
     <Compile Include="Sql\ISelector.cs" />
     <Compile Include="Sql\Comparison.cs" />
     <Compile Include="Sql\IUpdater.cs" />
