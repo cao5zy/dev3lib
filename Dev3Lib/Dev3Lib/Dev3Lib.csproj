@@ -48,6 +48,7 @@
     <Compile Include="Algorithms\EnumerableAlgorithms.cs" />
     <Compile Include="Algorithms\PostionNotFoundException.cs" />
     <Compile Include="Converter.cs" />
+    <Compile Include="DataCheck\DataCheckUtility.cs" />
     <Compile Include="DbConvert\DbConvertHelper.cs" />
     <Compile Include="Media\Mp3TagID3V1.cs" />
     <Compile Include="Notification.cs" />
