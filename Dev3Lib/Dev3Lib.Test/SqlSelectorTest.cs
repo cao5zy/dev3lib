@@ -594,6 +594,56 @@ order by BlockedFlag
                 }
             }
         }
+
+        [TestMethod]
+        public void Select_Performance_Compare()
+        {
+            /*
+             * 
+             * select * from tblTBAAupair
+where BlockedFlag = 0
+and AuPairStatusID in (1,2,3)
+and LastLoggedIn > '2012-9-1'
+order by BlockedFlag
+             * */
+
+            Action<ISelector> run = (selector) =>
+            {
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
+                var count = selector.Count(
+                   "select count(*) from tblTBAAupair",
+                   new WhereClause(0, "BlockedFlag")
+                   .And(new InClause(new object[] { 1, 2, 3 }, "AuPairStatusID"))
+                    .And(new WhereClause(DateTime.Parse("2012-9-1"), "LastLoggedIn", Comparison.GreatorThan)));
+
+                watch.Stop();
+                Trace.WriteLine(string.Format("elapsed 1 {0}", watch.ElapsedTicks));
+
+                Assert.AreEqual(1194, count);
+            };
+
+            RunSql(run);
+
+            using (SqlConnection conn = new SqlConnection("Initial Catalog=tbaDATA;Data Source=(local)\\Sqlexpress;Integrated Security=true"))
+            {
+                conn.Open();
+                Stopwatch watch = new Stopwatch();
+                int count = 0;
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    watch.Start();
+                    cmd.CommandText = "select count(*) from tblTBAAupair where BlockedFlag = 0 and AuPairStatusID in (1,2,3) and LastLoggedIn > '2012-9-1'";
+                    cmd.CommandType = CommandType.Text;
+
+                    count = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    watch.Stop();
+
+                    Trace.WriteLine(string.Format("elapsed 2 {0}", watch.ElapsedTicks));
+                }
+            }
+        }
         private void RunSql(Action<ISelector> run)
         {
             ContainerBuilder builder = new ContainerBuilder();
