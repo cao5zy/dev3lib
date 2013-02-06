@@ -4,6 +4,7 @@ using Autofac;
 using Dev3Lib.Sql;
 using System.Data.SqlClient;
 using System.Data;
+using System.Diagnostics;
 
 namespace Dev3Lib.Test
 {
@@ -550,21 +551,48 @@ order by BlockedFlag
 
             Action<ISelector> run = (selector) =>
             {
-
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
                 var reader = selector.Read<TestItem>(_convert,
                    "select * from tblTBAAupair",
                    new WhereClause(0, "BlockedFlag")
                    .And(new InClause(new object[] { 1, 2, 3 }, "AuPairStatusID"))
                     .And(new WhereClause(DateTime.Parse("2012-9-1"), "LastLoggedIn", Comparison.GreatorThan)),
-                    new string[] { "BlockedFlag" });
+                    "BlockedFlag");
                 int count = 0;
                 while (reader.MoveNext())
                     count++;
+                watch.Stop();
+                Trace.WriteLine(string.Format("elapsed 1 {0}", watch.ElapsedTicks));
 
                 Assert.AreEqual(1194, count);
+
+                count = 0;
+                
             };
 
             RunSql(run);
+
+            using (SqlConnection conn = new SqlConnection("Initial Catalog=tbaDATA;Data Source=(local)\\Sqlexpress;Integrated Security=true"))
+            {
+                conn.Open();
+                Stopwatch watch = new Stopwatch();
+                int count = 0;
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    watch.Start();
+                    cmd.CommandText = "select * from tblTBAAupair where BlockedFlag = 0 and AuPairStatusID in (1,2,3) and LastLoggedIn > '2012-9-1' order by BlockedFlag";
+                    cmd.CommandType = CommandType.Text;
+
+                    var reader1 = cmd.ExecuteReader();
+
+                    while (reader1.Read())
+                        count++;
+                    watch.Stop();
+
+                    Trace.WriteLine(string.Format("elapsed 2 {0}", watch.ElapsedTicks));
+                }
+            }
         }
         private void RunSql(Action<ISelector> run)
         {

@@ -11,12 +11,12 @@ namespace Dev3Lib.Sql
         IEnumerator<T> Read<T>(Converter<IDataReader, T> convert,
             string sql,
             WhereClause where,
-            IEnumerable<string> orderBys = null);
+            string orderBys = null);
 
         List<T> Return<T>(Converter<IDataReader, T> convert,
             string sql,
             WhereClause where,
-            IEnumerable<string> orderBys = null);
+            string orderBys = null);
 
         int Count(string sql,
             WhereClause where);

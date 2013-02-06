@@ -22,7 +22,7 @@ namespace Dev3Lib.Sql
         public IEnumerator<T> Read<T>(Converter<System.Data.IDataReader, T> convert,
             string sql, 
             WhereClause where,
-            IEnumerable<string> orderBys = null)
+            string orderBys = null)
         {
             using (var cmd = _conn.CreateCommand())
             {
@@ -46,7 +46,7 @@ namespace Dev3Lib.Sql
                     cmd.CommandText = string.Format(_selectOrderByFormat, 
                         sql,
                         whereClause,
-                        orderBys.SafeJoinWith(","));
+                        orderBys);
                 }
 
                 GenerateParameters(where, cmd.Parameters);
@@ -62,7 +62,7 @@ namespace Dev3Lib.Sql
         public List<T> Return<T>(Converter<System.Data.IDataReader, T> convert, 
             string sql, 
             WhereClause where,
-            IEnumerable<string> orderBys = null)
+            string orderBys = null)
         {
             using (var cmd = _conn.CreateCommand())
             {
@@ -86,7 +86,7 @@ namespace Dev3Lib.Sql
                     cmd.CommandText = string.Format(_selectOrderByFormat,
                         sql,
                         whereClause,
-                        orderBys.SafeJoinWith(","));
+                        orderBys);
                 }
                 GenerateParameters(where, cmd.Parameters);
 
