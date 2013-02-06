@@ -11,13 +11,18 @@ namespace Dev3Lib.Sql
         private SqlConnection _conn;
         private SqlTransaction _trans;
         private static readonly string _selectFormat = "{0} where 1=1 {1}";
+        private static readonly string _selectOrderByFormat = "{0} where 1=1 {1} order by {2}";
+
         public SqlSelector(SqlConnection conn, SqlTransaction trans = null)
         {
             _conn = conn;
             _trans = trans;
         }
 
-        public IEnumerator<T> Read<T>(Converter<System.Data.IDataReader, T> convert, string sql, WhereClause where)
+        public IEnumerator<T> Read<T>(Converter<System.Data.IDataReader, T> convert,
+            string sql, 
+            WhereClause where,
+            IEnumerable<string> orderBys = null)
         {
             using (var cmd = _conn.CreateCommand())
             {
@@ -30,9 +35,19 @@ namespace Dev3Lib.Sql
                 if (where != null)
                     whereClause = string.Format("and {0}", where.Clause);
 
-                cmd.CommandText = string.Format(_selectFormat,
-                    sql,
-                   whereClause);
+                if (orderBys == null)
+                {
+                    cmd.CommandText = string.Format(_selectFormat,
+                        sql,
+                       whereClause);
+                }
+                else
+                {
+                    cmd.CommandText = string.Format(_selectOrderByFormat, 
+                        sql,
+                        whereClause,
+                        orderBys.SafeJoinWith(","));
+                }
 
                 GenerateParameters(where, cmd.Parameters);
 
@@ -44,7 +59,10 @@ namespace Dev3Lib.Sql
             }
         }
 
-        public List<T> Return<T>(Converter<System.Data.IDataReader, T> convert, string sql, WhereClause where)
+        public List<T> Return<T>(Converter<System.Data.IDataReader, T> convert, 
+            string sql, 
+            WhereClause where,
+            IEnumerable<string> orderBys = null)
         {
             using (var cmd = _conn.CreateCommand())
             {
@@ -57,10 +75,19 @@ namespace Dev3Lib.Sql
                 if (where != null)
                     whereClause = string.Format("and {0}", where.Clause);
 
-                cmd.CommandText = string.Format(_selectFormat,
-                    sql,
-                    whereClause);
-
+                if (orderBys == null)
+                {
+                    cmd.CommandText = string.Format(_selectFormat,
+                        sql,
+                        whereClause);
+                }
+                else
+                {
+                    cmd.CommandText = string.Format(_selectOrderByFormat,
+                        sql,
+                        whereClause,
+                        orderBys.SafeJoinWith(","));
+                }
                 GenerateParameters(where, cmd.Parameters);
 
                 List<T> list = new List<T>();

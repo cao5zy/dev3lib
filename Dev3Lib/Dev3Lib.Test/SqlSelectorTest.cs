@@ -545,6 +545,7 @@ and (LastLoggedIn >= '2012-07-13' and LastLoggedIn < '2012-12-12')
 where BlockedFlag = 0
 and AuPairStatusID in (1,2,3)
 and LastLoggedIn > '2012-9-1'
+order by BlockedFlag
              * */
 
             Action<ISelector> run = (selector) =>
@@ -554,7 +555,8 @@ and LastLoggedIn > '2012-9-1'
                    "select * from tblTBAAupair",
                    new WhereClause(0, "BlockedFlag")
                    .And(new InClause(new object[] { 1, 2, 3 }, "AuPairStatusID"))
-                    .And(new WhereClause(DateTime.Parse("2012-9-1"), "LastLoggedIn", Comparison.GreatorThan)));
+                    .And(new WhereClause(DateTime.Parse("2012-9-1"), "LastLoggedIn", Comparison.GreatorThan)),
+                    new string[] { "BlockedFlag" });
                 int count = 0;
                 while (reader.MoveNext())
                     count++;
