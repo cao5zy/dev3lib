@@ -596,6 +596,41 @@ order by BlockedFlag
         }
 
         [TestMethod]
+        public void Select_DBNull()
+        {
+            /*
+             * select * from [dbo].[tblTBAMessages]
+where ResponseDate is null
+             * */
+            Action<ISelector> run = (selector) =>
+            {
+                var count = selector.Count("select count(*) from [dbo].[tblTBAMessages]",
+                    new DBNullClause("ResponseDate"));
+
+                Assert.AreEqual(3063, count);
+            };
+
+            RunSql(run);
+        }
+
+        [TestMethod]
+        public void Select_NotDbNull() {
+            /*
+             * select * from [dbo].[tblTBAMessages]
+where ResponseDate is not null
+             * */
+            Action<ISelector> run = (selector) =>
+            {
+                var count = selector.Count("select count(*) from [dbo].[tblTBAMessages]",
+                    new DBNotNullClause("ResponseDate"));
+
+                Assert.AreEqual(2361, count);
+            };
+
+            RunSql(run);
+        }
+
+        [TestMethod]
         public void Select_Performance_Compare()
         {
             /*
