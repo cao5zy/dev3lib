@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dev3Lib</RootNamespace>
     <AssemblyName>Dev3Lib</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -33,6 +33,9 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\..\..\Dependencies\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -73,6 +76,7 @@
     <Compile Include="StringManipulation.cs" />
     <Compile Include="Web\ContextObjectAttribute.cs" />
     <Compile Include="Web\ContextObjectHelper.cs" />
+    <Compile Include="Web\DependencyFactory.cs" />
     <Compile Include="Web\DicExpressionBuilder.cs" />
     <Compile Include="Web\DicLocation.cs" />
     <Compile Include="Web\DropdownItemAttribute.cs" />

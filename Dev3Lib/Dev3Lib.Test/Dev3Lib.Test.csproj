@@ -53,6 +53,7 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -70,6 +71,7 @@
     <Compile Include="SqlSelectorTest.cs" />
     <Compile Include="SqlInsertorTest.cs" />
     <Compile Include="SqlUpdaterTest.cs" />
+    <Compile Include="DependencyFactoryTest.cs" />
     <Compile Include="WhereTest.cs" />
   </ItemGroup>
   <ItemGroup>
