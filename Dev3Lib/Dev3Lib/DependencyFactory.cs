@@ -21,32 +21,12 @@ namespace Dev3Lib
                     return _container;
                 else
                 {
-                    if (HttpContext.Current == null)
+                    lock (_obj)
                     {
-                        lock (_obj)
+                        if (_container == null)
                         {
-                            if (_container == null)
-                            {
-                                _container = _containerFunc();
-                            }
+                            _container = _containerFunc();
                         }
-                    }
-                    else
-                    {
-                        if (HttpContext.Current.Application[_dependencyFactory] == null)
-                        {
-                            lock (_obj)
-                            {
-                                if (HttpContext.Current.Application[_dependencyFactory] == null)
-                                {
-                                    _container = _containerFunc();
-                                    HttpContext.Current.Application[_dependencyFactory] = _container;
-                                }
-                            }
-                        }
-                        else
-                            _container = (IContainer)HttpContext.Current.Application[_dependencyFactory];
-
                     }
                 }
 
@@ -72,7 +52,7 @@ namespace Dev3Lib
         private static bool _isDisposed = true;
         public static DependencyScope BeginScope()
         {
-            if(!_isDisposed)
+            if (!_isDisposed)
                 throw new InvalidOperationException("can't start scope");
 
             _scope = Container.BeginLifetimeScope();
