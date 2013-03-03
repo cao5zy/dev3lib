@@ -48,35 +48,25 @@ namespace Dev3Lib
             return _scope.Resolve<T>();
         }
 
-        private static ILifetimeScope _scope = null;
-        private static bool _isDisposed = true;
+        public static ILifetimeScope _scope = null;
         public static DependencyScope BeginScope()
         {
-            if (!_isDisposed)
+            if (_scope != null)
                 throw new InvalidOperationException("can't start scope");
 
             _scope = Container.BeginLifetimeScope();
-
-            return new DependencyScope(ref _scope, ref _isDisposed);
+            return new DependencyScope();
         }
 
     }
 
     public class DependencyScope : IDisposable
     {
-        private ILifetimeScope _scope;
-        private bool _isDisposed;
-        public DependencyScope(ref ILifetimeScope scope, ref bool isDisposed)
-        {
-            _scope = scope;
-            _isDisposed = isDisposed;
-        }
         public void Dispose()
         {
-            _scope.Disposer.Dispose();
-            _scope.Dispose();
-            _scope = null;
-            _isDisposed = true;
+            DependencyFactory._scope.Disposer.Dispose();
+            DependencyFactory._scope.Dispose();
+            DependencyFactory._scope = null;
         }
     }
 
