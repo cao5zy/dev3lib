@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace Dev3Lib.Web
+namespace Dev3Lib
 {
     public static class DependencyFactory
     {
@@ -54,6 +54,7 @@ namespace Dev3Lib.Web
             }
         }
 
+
         public static void SetContainer(Func<IContainer> setContainer)
         {
             _containerFunc = setContainer;
@@ -61,8 +62,42 @@ namespace Dev3Lib.Web
 
         public static T Resolve<T>()
         {
-            return Container.Resolve<T>();
+            if (_scope == null)
+                throw new InvalidOperationException("scope has not been set");
+
+            return _scope.Resolve<T>();
+        }
+
+        private static ILifetimeScope _scope = null;
+        private static bool _isDisposed = true;
+        public static DependencyScope BeginScope()
+        {
+            if(!_isDisposed)
+                throw new InvalidOperationException("can't start scope");
+
+            _scope = Container.BeginLifetimeScope();
+
+            return new DependencyScope(ref _scope, ref _isDisposed);
         }
 
     }
+
+    public class DependencyScope : IDisposable
+    {
+        private ILifetimeScope _scope;
+        private bool _isDisposed;
+        public DependencyScope(ref ILifetimeScope scope, ref bool isDisposed)
+        {
+            _scope = scope;
+            _isDisposed = isDisposed;
+        }
+        public void Dispose()
+        {
+            _scope.Disposer.Dispose();
+            _scope.Dispose();
+            _scope = null;
+            _isDisposed = true;
+        }
+    }
+
 }

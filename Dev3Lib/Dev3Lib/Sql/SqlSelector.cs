@@ -8,26 +8,23 @@ namespace Dev3Lib.Sql
 {
     public class SqlSelector : ISelector
     {
-        private SqlConnection _conn;
-        private SqlTransaction _trans;
+        private IDbContext _dbContext;
         private static readonly string _selectFormat = "{0} where 1=1 {1}";
         private static readonly string _selectOrderByFormat = "{0} where 1=1 {1} order by {2}";
 
-        public SqlSelector(SqlConnection conn, SqlTransaction trans = null)
+        public SqlSelector(IDbContext dbContext)
         {
-            _conn = conn;
-            _trans = trans;
+            _dbContext = dbContext;
         }
 
         public IEnumerator<T> Read<T>(Converter<System.Data.IDataReader, T> convert,
-            string sql, 
+            string sql,
             WhereClause where,
             string orderBys = null)
         {
-            using (var cmd = _conn.CreateCommand())
+            using (var cmd = _dbContext.Connection.CreateCommand())
             {
-                if (_trans != null)
-                    cmd.Transaction = _trans;
+                cmd.Transaction = _dbContext.Transaction;
 
                 cmd.CommandType = System.Data.CommandType.Text;
 
@@ -43,7 +40,7 @@ namespace Dev3Lib.Sql
                 }
                 else
                 {
-                    cmd.CommandText = string.Format(_selectOrderByFormat, 
+                    cmd.CommandText = string.Format(_selectOrderByFormat,
                         sql,
                         whereClause,
                         orderBys);
@@ -59,15 +56,14 @@ namespace Dev3Lib.Sql
             }
         }
 
-        public List<T> Return<T>(Converter<System.Data.IDataReader, T> convert, 
-            string sql, 
+        public List<T> Return<T>(Converter<System.Data.IDataReader, T> convert,
+            string sql,
             WhereClause where,
             string orderBys = null)
         {
-            using (var cmd = _conn.CreateCommand())
+            using (var cmd = _dbContext.Connection.CreateCommand())
             {
-                if (_trans != null)
-                    cmd.Transaction = _trans;
+                cmd.Transaction = _dbContext.Transaction;
 
                 cmd.CommandType = System.Data.CommandType.Text;
 
@@ -104,10 +100,9 @@ namespace Dev3Lib.Sql
 
         public int Count(string sql, WhereClause where)
         {
-            using (var cmd = _conn.CreateCommand())
+            using (var cmd = _dbContext.Connection.CreateCommand())
             {
-                if (_trans != null)
-                    cmd.Transaction = _trans;
+                cmd.Transaction = _dbContext.Transaction;
 
                 cmd.CommandType = System.Data.CommandType.Text;
 

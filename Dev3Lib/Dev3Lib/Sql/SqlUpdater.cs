@@ -9,15 +9,12 @@ namespace Dev3Lib.Sql
 {
     public class SqlUpdater : IUpdater
     {
-        private SqlConnection _conn;
-        private SqlTransaction _trans;
+        private IDbContext _dbContext;
         private static readonly string _updateFormat = "update {0} set {1} where 1 = 1 and {2}";
 
-        public SqlUpdater(SqlConnection conn,
-            SqlTransaction trans = null)
+        public SqlUpdater(IDbContext dbContext)
         {
-            _conn = conn;
-            _trans = trans;
+            _dbContext = dbContext;
         }
 
         public void Update(string tableName, IEnumerable<IValue> values, WhereClause where)
@@ -45,9 +42,9 @@ namespace Dev3Lib.Sql
 
             if (columnNames.Count != 0)
             {
-                using (var cmd = _conn.CreateCommand())
+                using (var cmd = _dbContext.Connection.CreateCommand())
                 {
-                    cmd.Transaction = _trans;
+                    cmd.Transaction = _dbContext.Transaction;
 
                     cmd.CommandType = System.Data.CommandType.Text;
                     cmd.CommandText = string.Format(_updateFormat,

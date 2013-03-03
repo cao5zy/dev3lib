@@ -8,12 +8,10 @@ namespace Dev3Lib.Sql
 {
     public class SqlInserter : IInserter
     {
-        private SqlConnection _conn;
-        private SqlTransaction _trans;
-        public SqlInserter(SqlConnection conn, SqlTransaction trans = null)
+        private IDbContext _dbContext;
+        public SqlInserter(IDbContext dbContext)
         {
-            _conn = conn;
-            _trans = trans;
+            _dbContext = dbContext;
         }
         private static readonly string _insertFormat = "insert into {0} ({1}) values({2})";
 
@@ -36,9 +34,9 @@ namespace Dev3Lib.Sql
 
             if (columnNames.Count != 0)
             {
-                using (var cmd = _conn.CreateCommand())
+                using (var cmd = _dbContext.Connection.CreateCommand())
                 {
-                    cmd.Transaction = _trans;
+                    cmd.Transaction = _dbContext.Transaction;
 
                     cmd.CommandType = System.Data.CommandType.Text;
                     cmd.CommandText = string.Format(_insertFormat,

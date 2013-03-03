@@ -33,8 +33,9 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
-    <Reference Include="Autofac">
-      <HintPath>..\..\..\Dependencies\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=2.4.5.724, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dependencies\Autofac-3.0.1-NET40\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -53,6 +54,8 @@
     <Compile Include="Converter.cs" />
     <Compile Include="DataCheck\DataCheckUtility.cs" />
     <Compile Include="DbConvert\DbConvertHelper.cs" />
+    <Compile Include="DefaultDbContext.cs" />
+    <Compile Include="IDbContext.cs" />
     <Compile Include="Media\Mp3TagID3V1.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Pagination.cs" />
@@ -76,7 +79,7 @@
     <Compile Include="StringManipulation.cs" />
     <Compile Include="Web\ContextObjectAttribute.cs" />
     <Compile Include="Web\ContextObjectHelper.cs" />
-    <Compile Include="Web\DependencyFactory.cs" />
+    <Compile Include="DependencyFactory.cs" />
     <Compile Include="Web\DicExpressionBuilder.cs" />
     <Compile Include="Web\DicLocation.cs" />
     <Compile Include="Web\DropdownItemAttribute.cs" />

@@ -524,9 +524,9 @@ and (LastLoggedIn >= '2012-07-13' and LastLoggedIn < '2012-12-12')
 
                 var reader = selector.Read<TestItem>(_convert,
                    "select * from tblTBAAupair",
-                   new WhereClause(1,"AuPairStatusID")
-                   .And(new WhereClause(DateTime.Parse("2012-07-13"), "LastLoggedIn","LastLoggedIn1", Comparison.GreatorThanEqualTo)
-                        .And(new WhereClause(DateTime.Parse("2012-12-12"),"LastLoggedIn","LastLoggedIn2", Comparison.LessThan))));
+                   new WhereClause(1, "AuPairStatusID")
+                   .And(new WhereClause(DateTime.Parse("2012-07-13"), "LastLoggedIn", "LastLoggedIn1", Comparison.GreatorThanEqualTo)
+                        .And(new WhereClause(DateTime.Parse("2012-12-12"), "LastLoggedIn", "LastLoggedIn2", Comparison.LessThan))));
                 int count = 0;
                 while (reader.MoveNext())
                     count++;
@@ -568,7 +568,7 @@ order by BlockedFlag
                 Assert.AreEqual(1194, count);
 
                 count = 0;
-                
+
             };
 
             RunSql(run);
@@ -614,7 +614,8 @@ where ResponseDate is null
         }
 
         [TestMethod]
-        public void Select_NotDbNull() {
+        public void Select_NotDbNull()
+        {
             /*
              * select * from [dbo].[tblTBAMessages]
 where ResponseDate is not null
@@ -629,7 +630,7 @@ where ResponseDate is not null
 
             RunSql(run);
         }
-
+        
         [TestMethod]
         public void Select_Performance_Compare()
         {
@@ -681,20 +682,39 @@ order by BlockedFlag
         }
         private void RunSql(Action<ISelector> run)
         {
-            ContainerBuilder builder = new ContainerBuilder();
-            builder.RegisterType<SqlSelector>().As<ISelector>();
 
-            using (SqlConnection conn = new SqlConnection("Initial Catalog=tbaDATA;Data Source=(local)\\Sqlexpress;Integrated Security=true"))
+            //ContainerBuilder builder = new ContainerBuilder();
+            //builder.RegisterType<SqlSelector>().As<ISelector>();
+
+            //using (IDbContext context = new DefaultDbContext("Initial Catalog=tbaDATA;Data Source=(local)\\Sqlexpress;Integrated Security=true"))
+            //{
+
+            //    builder.RegisterInstance<IDbContext>(context).ExternallyOwned();
+
+            //    var selector = builder.Build().Resolve<ISelector>();
+
+            //    run(selector);
+
+            //}
+
+            using (DependencyFactory.BeginScope())
             {
-                conn.Open();
-
-                builder.RegisterInstance<SqlConnection>(conn).ExternallyOwned();
-
-                var selector = builder.Build().Resolve<ISelector>();
-
-                run(selector);
-
+                run(DependencyFactory.Resolve<ISelector>());
             }
+
+        }
+
+        [ClassInitialize]
+        public static void InitClass(TestContext context)
+        {
+            DependencyFactory.SetContainer(() => {
+                ContainerBuilder container = new ContainerBuilder();
+
+                container.RegisterType<DefaultDbContext>().WithParameter(new TypedParameter(typeof(string), @"Initial Catalog=tbaDATA;Data Source=.\Sqlexpress;Integrated Security=true")).As<IDbContext>().InstancePerLifetimeScope();
+                container.RegisterType<SqlSelector>().As<ISelector>();
+
+                return container.Build();
+            });
         }
     }
 }
