@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EDDF4A1B-35AD-40A2-9E25-1CC74281CCA6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Dev3Lib</RootNamespace>
+    <AssemblyName>Dev3Lib</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <Reference Include="Autofac, Version=2.4.5.724, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dependencies\Autofac-3.0.1-NET40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Algorithms\EnumerableAlgorithms.cs" />
+    <Compile Include="Algorithms\PostionNotFoundException.cs" />
+    <Compile Include="Converter.cs" />
+    <Compile Include="DataCheck\DataCheckUtility.cs" />
+    <Compile Include="DbConvert\DbConvertHelper.cs" />
+    <Compile Include="DefaultDbContext.cs" />
+    <Compile Include="IDbContext.cs" />
+    <Compile Include="Media\Mp3TagID3V1.cs" />
+    <Compile Include="Notification.cs" />
+    <Compile Include="Pagination.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sections\LingualSection.cs" />
+    <Compile Include="Sql\DBNotNullClause.cs" />
+    <Compile Include="Sql\DBNullClause.cs" />
+    <Compile Include="Sql\IInserter.cs" />
+    <Compile Include="Sql\InClause.cs" />
+    <Compile Include="Sql\SqlValue.cs" />
+    <Compile Include="Sql\ISelector.cs" />
+    <Compile Include="Sql\Comparison.cs" />
+    <Compile Include="Sql\IUpdater.cs" />
+    <Compile Include="Sql\IValue.cs" />
+    <Compile Include="Sql\WhereClause.cs" />
+    <Compile Include="Sql\SqlInserter.cs" />
+    <Compile Include="Sql\SqlSelector.cs" />
+    <Compile Include="Sql\SqlTableSelectCmd.cs" />
+    <Compile Include="Sql\SqlSPHelper.cs" />
+    <Compile Include="Sql\SqlUpdater.cs" />
+    <Compile Include="StringManipulation.cs" />
+    <Compile Include="Web\ContextObjectAttribute.cs" />
+    <Compile Include="Web\ContextObjectHelper.cs" />
+    <Compile Include="DependencyFactory.cs" />
+    <Compile Include="Web\DicExpressionBuilder.cs" />
+    <Compile Include="Web\DicLocation.cs" />
+    <Compile Include="Web\DropdownItemAttribute.cs" />
+    <Compile Include="Web\DropdownItemHelper.cs" />
+    <Compile Include="Web\GridViewWrapper.cs" />
+    <Compile Include="Web\MessageNotifier.cs" />
+    <Compile Include="Web\SessionObjectAttribute.cs" />
+    <Compile Include="Web\SessionObjectHelper.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetPath)" "$(SolutionDir)..\..\Dependencies\"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
