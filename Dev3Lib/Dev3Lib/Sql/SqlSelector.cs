@@ -30,8 +30,14 @@ namespace Dev3Lib.Sql
 
                 string whereClause = string.Empty;
                 if (where != null)
+                {
                     whereClause = string.Format("and {0}", where.Clause);
-
+                    GenerateParameters(where, cmd.Parameters);
+                }
+                else
+                {
+                    whereClause = string.Empty;
+                }
                 if (orderBys == null)
                 {
                     cmd.CommandText = string.Format(_selectFormat,
@@ -46,7 +52,6 @@ namespace Dev3Lib.Sql
                         orderBys);
                 }
 
-                GenerateParameters(where, cmd.Parameters);
 
                 using (var reader = cmd.ExecuteReader())
                 {
@@ -69,7 +74,14 @@ namespace Dev3Lib.Sql
 
                 string whereClause = string.Empty;
                 if (where != null)
+                {
                     whereClause = string.Format("and {0}", where.Clause);
+                    GenerateParameters(where, cmd.Parameters);
+                }
+                else
+                {
+                    whereClause = string.Empty;
+                }
 
                 if (orderBys == null)
                 {
@@ -84,7 +96,6 @@ namespace Dev3Lib.Sql
                         whereClause,
                         orderBys);
                 }
-                GenerateParameters(where, cmd.Parameters);
 
                 List<T> list = new List<T>();
 
@@ -108,14 +119,20 @@ namespace Dev3Lib.Sql
 
                 string whereClause = string.Empty;
                 if (where != null)
+                {
                     whereClause = string.Format("and {0}", where.Clause);
+                    GenerateParameters(where, cmd.Parameters);
+                }
+                else
+                {
+                    whereClause = string.Empty;
+                }
 
                 cmd.CommandText = string.Format(_selectFormat,
                     sql,
                     whereClause
                     );
 
-                GenerateParameters(where, cmd.Parameters);
 
                 var result = cmd.ExecuteScalar();
                 if (result == null)
