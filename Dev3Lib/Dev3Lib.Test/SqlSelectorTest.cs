@@ -630,6 +630,31 @@ where ResponseDate is not null
 
             RunSql(run);
         }
+
+        [TestMethod]
+        public void Select_NoWhere()
+        {
+            /*
+             * 
+             * select top 5 * from tbltbaaupair
+             * */
+
+            Action<ISelector> run = (selector) => {
+                var list = selector.Return<int>((n)=>0, "select top 5 * from tbltbaaupair", null);
+                Assert.AreEqual(5, list.Count);
+
+                var reader = selector.Read<int>((n) => 0, "select top 5 * from tbltbaaupair", null);
+                int count = 0;
+                while (reader.MoveNext())
+                    count++;
+                Assert.AreEqual(5, count);
+
+                int num = selector.Count("select count(*) from tbltbaaupair", null);
+                Assert.AreEqual(1675, num);
+            };
+
+            RunSql(run);
+        }
         
         [TestMethod]
         public void Select_Performance_Compare()
@@ -682,26 +707,11 @@ order by BlockedFlag
         }
         private void RunSql(Action<ISelector> run)
         {
-
-            //ContainerBuilder builder = new ContainerBuilder();
-            //builder.RegisterType<SqlSelector>().As<ISelector>();
-
-            //using (IDbContext context = new DefaultDbContext("Initial Catalog=tbaDATA;Data Source=(local)\\Sqlexpress;Integrated Security=true"))
-            //{
-
-            //    builder.RegisterInstance<IDbContext>(context).ExternallyOwned();
-
-            //    var selector = builder.Build().Resolve<ISelector>();
-
-            //    run(selector);
-
-            //}
-
             using (DependencyFactory.BeginScope())
             {
+                DependencyFactory.Resolve<IDbContext>().BeginTransaction();
                 run(DependencyFactory.Resolve<ISelector>());
             }
-
         }
 
         [ClassInitialize]
