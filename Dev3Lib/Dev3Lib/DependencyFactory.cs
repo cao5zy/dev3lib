@@ -10,30 +10,75 @@ namespace Dev3Lib
     public static class DependencyFactory
     {
         const string _dependencyFactory = "{EE9E78D1-7740-4C18-B139-3A323E79E238}";
+        const string _scopeKey = "{F7171B48-D1E8-42E7-8EB5-F9583022AE26}";
+
         private static Func<IContainer> _containerFunc;
         private static readonly object _obj = new object();
-        private static IContainer _container;
+        private static IContainer _container = null;
+        private static ILifetimeScope _scope = null;
+
         private static IContainer Container
         {
             get
             {
                 if (_container != null)
+                {
                     return _container;
+                }
                 else
                 {
-                    lock (_obj)
+                    if (HttpContext.Current != null)
                     {
-                        if (_container == null)
+                        var container = HttpContext.Current.Application[_dependencyFactory] as IContainer;
+                        if (container != null)
+                            return container;
+                        else
                         {
-                            _container = _containerFunc();
+                            lock (_obj)
+                            {
+                                var container1 = HttpContext.Current.Application[_dependencyFactory] as IContainer;
+                                if (container1 == null)
+                                {
+                                    HttpContext.Current.Application[_dependencyFactory] = _containerFunc();
+                                }
+                            }
+
+                            return (IContainer)HttpContext.Current.Application[_dependencyFactory];
+                        }
+                    }
+                    else
+                    {
+                        lock (_obj)
+                        {
+                            if (_container == null)
+                            {
+                                _container = _containerFunc();
+                            }
+
+                            return _container;
                         }
                     }
                 }
-
-                return _container;
             }
         }
 
+        public static ILifetimeScope Scope
+        {
+            get
+            {
+                if (HttpContext.Current == null)
+                    return _scope;
+                else
+                    return HttpContext.Current.Items[_scopeKey] as ILifetimeScope;
+            }
+            set
+            {
+                if (HttpContext.Current == null)
+                    _scope = value;
+                else
+                    HttpContext.Current.Items[_scopeKey] = value;
+            }
+        }
 
         public static void SetContainer(Func<IContainer> setContainer)
         {
@@ -42,19 +87,18 @@ namespace Dev3Lib
 
         public static T Resolve<T>()
         {
-            if (_scope == null)
+            if (Scope == null)
                 throw new InvalidOperationException("scope has not been set");
 
-            return _scope.Resolve<T>();
+            return Scope.Resolve<T>();
         }
 
-        public static ILifetimeScope _scope = null;
         public static DependencyScope BeginScope()
         {
-            if (_scope != null)
+            if (Scope != null)
                 throw new InvalidOperationException("can't start scope");
 
-            _scope = Container.BeginLifetimeScope();
+            Scope = Container.BeginLifetimeScope();
             return new DependencyScope();
         }
 
@@ -64,9 +108,9 @@ namespace Dev3Lib
     {
         public void Dispose()
         {
-            DependencyFactory._scope.Disposer.Dispose();
-            DependencyFactory._scope.Dispose();
-            DependencyFactory._scope = null;
+            DependencyFactory.Scope.Disposer.Dispose();
+            DependencyFactory.Scope.Dispose();
+            DependencyFactory.Scope = null;
         }
     }
 
