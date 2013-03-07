@@ -19,7 +19,11 @@ namespace Dev3Lib.Test
                 return builder.Build();
             });
 
-            Assert.IsNotNull(DependencyFactory.Resolve<TestClass>());
+            using (DependencyFactory.BeginScope())
+            {
+                Assert.IsNotNull(DependencyFactory.Resolve<TestClass>());
+            }
+
         }
 
         class TestClass
