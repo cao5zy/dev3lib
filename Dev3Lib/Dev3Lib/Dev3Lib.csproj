@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup />
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Autofac, Version=2.4.5.724, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -77,6 +78,7 @@
     <Compile Include="Sql\SqlSPHelper.cs" />
     <Compile Include="Sql\SqlUpdater.cs" />
     <Compile Include="StringManipulation.cs" />
+    <Compile Include="Util\DateTimeForEach.cs" />
     <Compile Include="Web\ContextObjectAttribute.cs" />
     <Compile Include="Web\ContextObjectHelper.cs" />
     <Compile Include="DependencyFactory.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="Web\MessageNotifier.cs" />
     <Compile Include="Web\SessionObjectAttribute.cs" />
     <Compile Include="Web\SessionObjectHelper.cs" />
+    <Compile Include="Web\JsCommand.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
