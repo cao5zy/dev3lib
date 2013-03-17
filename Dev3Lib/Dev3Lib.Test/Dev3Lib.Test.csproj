@@ -73,6 +73,7 @@
     <Compile Include="SqlInsertorTest.cs" />
     <Compile Include="SqlUpdaterTest.cs" />
     <Compile Include="DependencyFactoryTest.cs" />
+    <Compile Include="JsCommandTests.cs" />
     <Compile Include="WhereTest.cs" />
   </ItemGroup>
   <ItemGroup>
