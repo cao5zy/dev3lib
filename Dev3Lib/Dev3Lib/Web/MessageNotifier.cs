@@ -9,12 +9,9 @@ namespace Dev3Lib.Web
 {
     public sealed class MessageNotifier
     {
-        private IDictionary _items;
+        private IDictionary<string, Event> _items = new Dictionary<string, Event>();
         private static readonly object _lockObj = new object();
-        private MessageNotifier()
-        {
-            _items = HttpContext.Current.Items;
-        }
+
         public sealed class NotifierEventArgs : EventArgs
         {
             public object Data;
@@ -36,13 +33,15 @@ namespace Dev3Lib.Web
             }
         }
 
-        private static MessageNotifier _notifier = new MessageNotifier();
-
+        const string _itemKey = "{A02E750B-F64C-46C0-AC8A-0793E691C5C1}";
         public static MessageNotifier Instance
         {
             get
             {
-                return _notifier;
+                if (!HttpContext.Current.Items.Contains(_itemKey))
+                    HttpContext.Current.Items.Add(_itemKey, new MessageNotifier());
+
+                return (MessageNotifier)HttpContext.Current.Items[_itemKey];
             }
         }
 
@@ -50,16 +49,10 @@ namespace Dev3Lib.Web
         {
             get
             {
-                if (!_items.Contains(eventName))
-                {
-                    lock (_lockObj)
-                    {
-                        if (!_items.Contains(eventName))
-                            _items.Add(eventName, new Event());
-                    }
-                }
+                if (!_items.ContainsKey(eventName))
+                    _items.Add(eventName, new Event());
 
-                return (Event)_items[eventName];
+                return _items[eventName];
             }
         }
 
