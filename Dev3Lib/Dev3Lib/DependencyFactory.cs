@@ -16,6 +16,30 @@ namespace Dev3Lib
         private static readonly object _obj = new object();
         private static IContainer _container = null;
         private static ILifetimeScope _scope = null;
+        private static int _scopeCount = 0;
+
+        public static void AddScopeCount()
+        {
+            _scopeCount++;
+        }
+
+        public static void MinusScopeCount()
+        {
+            if (_scopeCount == 0)
+                throw new InvalidOperationException("No scope to minus. It is an internal operation");
+
+            _scopeCount--;
+        }
+
+        public static bool IsLastScope()
+        {
+            return _scopeCount == 1;
+        }
+
+        public static bool IsScopeEmpty()
+        {
+            return _scopeCount == 0;
+        }
 
         private static IContainer Container
         {
@@ -95,10 +119,13 @@ namespace Dev3Lib
 
         public static DependencyScope BeginScope()
         {
-            if (Scope != null)
+            if ((Scope != null && _scopeCount == 0) || (Scope == null && _scopeCount != 0))
                 throw new InvalidOperationException("can't start scope");
 
-            Scope = Container.BeginLifetimeScope();
+            if (_scopeCount == 0)
+            {
+                Scope = Container.BeginLifetimeScope();
+            }
             return new DependencyScope();
         }
 
@@ -106,11 +133,20 @@ namespace Dev3Lib
 
     public class DependencyScope : IDisposable
     {
+        public DependencyScope()
+        {
+            DependencyFactory.AddScopeCount();
+        }
         public void Dispose()
         {
-            DependencyFactory.Scope.Disposer.Dispose();
-            DependencyFactory.Scope.Dispose();
-            DependencyFactory.Scope = null;
+            if (DependencyFactory.IsLastScope())
+            {
+                DependencyFactory.Scope.Disposer.Dispose();
+                DependencyFactory.Scope.Dispose();
+                DependencyFactory.Scope = null;
+            }
+
+            DependencyFactory.MinusScopeCount();
         }
     }
 
