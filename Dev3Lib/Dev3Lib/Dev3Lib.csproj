@@ -79,6 +79,7 @@
     <Compile Include="Sql\SqlUpdater.cs" />
     <Compile Include="StringManipulation.cs" />
     <Compile Include="Util\DateTimeForEach.cs" />
+    <Compile Include="Util\EnumExtension.cs" />
     <Compile Include="Web\ContextObjectAttribute.cs" />
     <Compile Include="Web\ContextObjectHelper.cs" />
     <Compile Include="DependencyFactory.cs" />
