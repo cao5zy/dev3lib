@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using Dev3Lib.Algorithms;
+using Dev3Lib.Util;
 
 namespace Dev3Lib.Sql
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Dev3Lib.Algorithms;
 
-namespace Dev3Lib
+namespace Dev3Lib.Util
 {
     public static class StringManipulation
     {
@@ -16,6 +16,14 @@ namespace Dev3Lib
         public static bool IsNullOrEmpty(this string str)
         {
             return string.IsNullOrEmpty(str);
+        }
+
+        public static string DefaultIfNullOrEmpty(this string str, string defaultVal)
+        {
+            if (string.IsNullOrEmpty(str))
+                return defaultVal;
+            else
+                return str;
         }
 
         public static bool IsNotEmpty(this string str)

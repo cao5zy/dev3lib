@@ -52,7 +52,7 @@
   <ItemGroup>
     <Compile Include="Algorithms\EnumerableAlgorithms.cs" />
     <Compile Include="Algorithms\PostionNotFoundException.cs" />
-    <Compile Include="Converter.cs" />
+    <Compile Include="Util\Converter.cs" />
     <Compile Include="DataCheck\DataCheckUtility.cs" />
     <Compile Include="DbConvert\DbConvertHelper.cs" />
     <Compile Include="DefaultDbContext.cs" />
@@ -77,7 +77,7 @@
     <Compile Include="Sql\SqlTableSelectCmd.cs" />
     <Compile Include="Sql\SqlSPHelper.cs" />
     <Compile Include="Sql\SqlUpdater.cs" />
-    <Compile Include="StringManipulation.cs" />
+    <Compile Include="Util\StringManipulation.cs" />
     <Compile Include="Util\DateTimeForEach.cs" />
     <Compile Include="Util\EnumExtension.cs" />
     <Compile Include="Web\ContextObjectAttribute.cs" />
