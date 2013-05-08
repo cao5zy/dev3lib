@@ -16,17 +16,17 @@ namespace Dev3Lib.Test
             B2B,
         }
         [TestMethod]
-        public void ToList_Success()
+        public void ToDic_Success()
         {
             testEnum e = new testEnum();
-            var list = EnumExtension.ToList<testEnum>();
+            var dic = EnumExtension.ToDic<testEnum>();
 
-            Assert.IsTrue(list.Count == 5);
-            Assert.AreEqual("Hello", list[0].Value);
-            Assert.AreEqual("A B", list[1].Value);
-            Assert.AreEqual("C/D", list[2].Value);
-            Assert.AreEqual("Ab Cd", list[3].Value);
-            Assert.AreEqual("B2B", list[4].Value);
+            Assert.IsTrue(dic.Count == 5);
+            Assert.AreEqual("Hello", dic[(int)testEnum.Hello]);
+            Assert.AreEqual("A B", dic[(int)testEnum.AB]);
+            Assert.AreEqual("C/D", dic[(int)testEnum.C_D]);
+            Assert.AreEqual("Ab Cd", dic[(int)testEnum.AbCd]);
+            Assert.AreEqual("B2B", dic[(int)testEnum.B2B]);
         }
 
         [TestMethod]
