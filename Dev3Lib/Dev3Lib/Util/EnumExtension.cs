@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Dev3Lib.Algorithms;
 
 namespace Dev3Lib.Util
 {
@@ -34,7 +35,8 @@ namespace Dev3Lib.Util
 
         public static void FillEnum<T>(object listSource, 
             string valueFieldName, 
-            string textFieldName)
+            string textFieldName,
+            IDictionary<int, string> overrides = null)
         {
             var type = listSource.GetType();
             string dataSourceName = "DataSource";
@@ -42,7 +44,14 @@ namespace Dev3Lib.Util
             var valueField = type.GetProperty(valueFieldName);
             var textField = type.GetProperty(textFieldName);
 
-            dataSource.SetValue(listSource, ToDic<T>(), null);
+            var dic = ToDic<T>();
+            if (overrides != null)
+            {
+                overrides.SafeFindAll(n => dic.ContainsKey(n.Key))
+                    .SafeForEach(n => dic[n.Key] = overrides[n.Key]);
+            }
+
+            dataSource.SetValue(listSource, dic, null);
             valueField.SetValue(listSource, "Key", null);
             textField.SetValue(listSource, "Value", null);
         }
@@ -50,7 +59,8 @@ namespace Dev3Lib.Util
         public static void FillEnum<T>(object listSource,
             T defaultVal, 
             string valueFieldName, 
-            string textFieldName)
+            string textFieldName,
+            IDictionary<int, string> overrides = null)
         {
             var type = listSource.GetType();
 
@@ -59,7 +69,14 @@ namespace Dev3Lib.Util
             var valueField = type.GetProperty(valueFieldName);
             var textField = type.GetProperty(textFieldName);
 
-            dataSource.SetValue(listSource, ToDic<T>(), null);
+            var dic = ToDic<T>();
+            if (overrides != null)
+            {
+                overrides.SafeFindAll(n => dic.ContainsKey(n.Key))
+                    .SafeForEach(n => dic[n.Key] = overrides[n.Key]);
+            }
+
+            dataSource.SetValue(listSource, dic, null);
             valueField.SetValue(listSource, "Key", null);
             textField.SetValue(listSource, "Value", null);
 
