@@ -12,9 +12,9 @@ namespace Dev3Lib.Util
     {
         private static Regex _OnlyText = new Regex(@"[A-Z]{1}[a-z]*");
         private static Regex _ContainsNumber = new Regex(@"\d+");
-        public static List<KeyValuePair<int, string>> ToList<T>()
+        public static IDictionary<int, string> ToDic<T>()
         {
-            List<KeyValuePair<int, string>> list = new List<KeyValuePair<int, string>>();
+            Dictionary<int, string> dic = new Dictionary<int, string>();
 
             Type t = typeof(T);
             var names = Enum.GetNames(t);
@@ -25,10 +25,11 @@ namespace Dev3Lib.Util
                 int index = 0;
                 foreach (var n in values)
                 {
-                    list.Add(new KeyValuePair<int, string>(Convert.ToInt32(n), ConvertName(names[index++])));
+                    
+                    dic.Add(Convert.ToInt32(n), ConvertName(names[index++]));
                 }
             }
-            return list;
+            return dic;
         }
 
         public static void FillEnum<T>(object listSource, 
@@ -41,7 +42,7 @@ namespace Dev3Lib.Util
             var valueField = type.GetProperty(valueFieldName);
             var textField = type.GetProperty(textFieldName);
 
-            dataSource.SetValue(listSource, ToList<T>(), null);
+            dataSource.SetValue(listSource, ToDic<T>(), null);
             valueField.SetValue(listSource, "Key", null);
             textField.SetValue(listSource, "Value", null);
         }
@@ -58,7 +59,7 @@ namespace Dev3Lib.Util
             var valueField = type.GetProperty(valueFieldName);
             var textField = type.GetProperty(textFieldName);
 
-            dataSource.SetValue(listSource, ToList<T>(), null);
+            dataSource.SetValue(listSource, ToDic<T>(), null);
             valueField.SetValue(listSource, "Key", null);
             textField.SetValue(listSource, "Value", null);
 
