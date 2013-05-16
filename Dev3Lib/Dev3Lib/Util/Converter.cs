@@ -31,6 +31,18 @@ namespace Dev3Lib.Util
             }
         }
 
+        public static int ToInt32(this object value, int defaultValue = 0)
+        {
+            if (value == null)
+                return defaultValue;
+
+            int result;
+            if(int.TryParse(value.ToString(), out result))
+                return result;
+            else
+                return defaultValue;
+        }
+
         public static double ToDouble(this string value)
         {
             if (value.IsNullOrEmpty())
@@ -53,6 +65,18 @@ namespace Dev3Lib.Util
                 else
                     return defaultVal;
             }
+        }
+
+        public static bool ToBool(this object value, bool defaultValue = false)
+        {
+            if (value == null)
+                return defaultValue;
+
+            bool val;
+            if(Boolean.TryParse(value.ToString(), out val))
+                return val;
+            else
+                return defaultValue;
         }
 
         public static DateTime ToDateTime(this string value)
