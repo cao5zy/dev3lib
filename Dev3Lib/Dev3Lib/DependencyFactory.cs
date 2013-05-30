@@ -15,6 +15,7 @@ namespace Dev3Lib
         private static Func<IContainer> _containerFunc;
         private static readonly object _obj = new object();
         private static IContainer _container = null;
+        private static ContainerBuilder _containerBuilder = null;
         private static ILifetimeScope _scope = null;
         private static int _scopeCount = 0;
 
@@ -63,7 +64,18 @@ namespace Dev3Lib
                                 var container1 = HttpContext.Current.Application[_dependencyFactory] as IContainer;
                                 if (container1 == null)
                                 {
-                                    HttpContext.Current.Application[_dependencyFactory] = _containerFunc();
+                                    if (_containerFunc != null)
+                                    {
+                                        HttpContext.Current.Application[_dependencyFactory] = _containerFunc();
+                                        _containerFunc = null;
+                                    }
+                                    else if (_containerBuilder != null)
+                                    {
+                                        HttpContext.Current.Application[_dependencyFactory] = _containerBuilder.Build();
+                                        _containerBuilder = null;
+                                    }
+                                    else
+                                        throw new InvalidOperationException("no container is initialized");
                                 }
                             }
 
@@ -76,7 +88,18 @@ namespace Dev3Lib
                         {
                             if (_container == null)
                             {
-                                _container = _containerFunc();
+                                if (_containerFunc != null)
+                                {
+                                    _container = _containerFunc();
+                                    _containerFunc = null;
+                                }
+                                else if (_containerBuilder != null)
+                                {
+                                    _container = _containerBuilder.Build();
+                                    _containerBuilder = null;
+                                }
+                                else
+                                    throw new InvalidOperationException("no container is initialized");
                             }
 
                             return _container;
@@ -128,6 +151,29 @@ namespace Dev3Lib
             }
             return new DependencyScope();
         }
+
+        public static void PartialSetContainer(Action<ContainerBuilder> containerBuilderFunc)
+        {
+            if (_containerFunc != null)
+                throw new InvalidOperationException("the other container has been initialized");
+
+            if (_containerBuilder != null)
+                containerBuilderFunc(_containerBuilder);
+            else
+            {
+                lock (_obj)
+                {
+                    if (_containerBuilder == null)
+                    {
+                        _containerBuilder = new ContainerBuilder();
+                    }
+
+                    containerBuilderFunc(_containerBuilder);
+                }
+            }
+        }
+
+
 
     }
 
