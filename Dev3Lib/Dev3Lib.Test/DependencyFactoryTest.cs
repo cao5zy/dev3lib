@@ -54,5 +54,27 @@ namespace Dev3Lib.Test
             public string Name { get { return "hello"; } }
         }
 
+        [TestMethod]
+        public void PartialSetContainer_Resolve_Normal_ReturnInstance()
+        {
+            DependencyFactory.PartialSetContainer(n => {
+                n.RegisterType<TestClass>();
+            });
+
+            using (DependencyFactory.BeginScope())
+            {
+                Assert.IsNotNull(DependencyFactory.Resolve<TestClass>());
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void PartialSetContainer_Resolve_ThrowException()
+        {
+            using (DependencyFactory.BeginScope())
+            {
+                Assert.IsNotNull(DependencyFactory.Resolve<TestClass>());
+            }
+        }
     }
 }
