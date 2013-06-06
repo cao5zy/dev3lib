@@ -66,6 +66,26 @@ namespace Dev3Lib.DbConvert
                 return _reader.GetDateTime(ordinal);
         }
 
+        public bool ToBoolean(string name, bool defaultVal = false)
+        {
+            int ordinal = GetOrdinal(name);
+
+            if (_reader.IsDBNull(ordinal))
+                return defaultVal;
+            else
+                return _reader.GetBoolean(ordinal);
+        }
+
+        public short ToShort(string name, short defaultVal = 0)
+        {
+            int ordinal = GetOrdinal(name);
+
+            if (_reader.IsDBNull(ordinal))
+                return defaultVal;
+            else
+                return _reader.GetInt16(ordinal);
+        }
+
         public bool Read()
         {
             return _reader.Read();

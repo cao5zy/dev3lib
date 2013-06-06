@@ -17,7 +17,7 @@ namespace Dev3Lib.Sql
         }
         private static readonly string _insertFormat = "insert into {0} ({1}) values({2})";
 
-        public void Insert(string tableName, IEnumerable<IValue> values)
+        public long Insert(string tableName, IEnumerable<IValue> values, bool returnSeed = false)
         {
             Dictionary<string, object> valuesDic = new Dictionary<string, object>();
             List<string> columnNames = new List<string>();
@@ -32,8 +32,8 @@ namespace Dev3Lib.Sql
                 columnNames.Add(val.ColumnName);
                 paramNames.Add(val.ParamName);
             }
-            
 
+            long returnVal = 0;
             if (columnNames.Count != 0)
             {
                 using (var cmd = _dbContext.Connection.CreateCommand())
@@ -46,17 +46,32 @@ namespace Dev3Lib.Sql
                         columnNames.SafeJoinWith(","),
                         paramNames.SafeJoinWith(","));
 
+                    if (returnSeed)
+                    {
+                        cmd.CommandText += ";select @@IDENTITY";
+                    }
+
                     foreach (var item in valuesDic)
                     {
                         cmd.Parameters.AddWithValue(item.Key, item.Value);
                     }
 
-                    int result = cmd.ExecuteNonQuery();
+                    if (returnSeed)
+                    {
+                        var result = cmd.ExecuteScalar();
+                        returnVal = Convert.ToInt64(result);
+                    }
+                    else
+                    {
+                        int result = cmd.ExecuteNonQuery();
 
-                    if (result == 0)
-                        throw new InvalidOperationException("no result inserted");
+                        if (result == 0)
+                            throw new InvalidOperationException("no result inserted");
+                    }
                 }
             }
+
+            return returnVal;
         }
     }
 }
