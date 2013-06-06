@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dev3Lib.DbConvert;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace Dev3Lib.Sql
             _dbContext = dbContext;
         }
 
-        public IEnumerator<T> Read<T>(Converter<System.Data.IDataReader, T> convert,
+        public IEnumerator<T> Read<T>(Converter<DataReaderAdapter, T> convert,
             string sql,
             WhereClause where,
             string orderBys = null)
@@ -53,15 +54,16 @@ namespace Dev3Lib.Sql
                 }
 
 
-                using (var reader = cmd.ExecuteReader())
+                using (var reader = new DataReaderAdapter(cmd.ExecuteReader()))
                 {
+
                     while (reader.Read())
                         yield return convert(reader);
                 }
             }
         }
 
-        public List<T> Return<T>(Converter<System.Data.IDataReader, T> convert,
+        public List<T> Return<T>(Converter<DataReaderAdapter, T> convert,
             string sql,
             WhereClause where,
             string orderBys = null)
@@ -99,7 +101,7 @@ namespace Dev3Lib.Sql
 
                 List<T> list = new List<T>();
 
-                using (var reader = cmd.ExecuteReader())
+                using (var reader = new DataReaderAdapter(cmd.ExecuteReader()))
                 {
                     while (reader.Read())
                         list.Add(convert(reader));

@@ -109,12 +109,9 @@ namespace Dev3Lib.Util
             return originalEnumName;
         }
 
-        public static T GetEnumValue<T>(this string selectedValue, T defaultVal, bool causeException = false)
+        public static T GetEnumValue<T>(this int selectedValue, T defaultVal, bool causeException = false)
         {
-            if (string.IsNullOrEmpty(selectedValue))
-                return defaultVal;
-
-            int val = Convert.ToInt32(selectedValue);
+            int val = selectedValue;
             foreach (var n in Enum.GetValues(typeof(T)))
             {
                 if (Convert.ToInt32(n) == val)
@@ -127,13 +124,11 @@ namespace Dev3Lib.Util
             return defaultVal;
         }
 
-        public static bool TryGetEnumValue<T>(this string selectedValue, out T outVal)
+        public static bool TryGetEnumValue<T>(this int selectedValue, out T outVal)
         {
             outVal = default(T);
-            if (string.IsNullOrEmpty(selectedValue))
-                return false;
 
-            int val = Convert.ToInt32(selectedValue);
+            int val = selectedValue;
             foreach (var n in Enum.GetValues(typeof(T)))
             {
                 if (Convert.ToInt32(n) == val)
