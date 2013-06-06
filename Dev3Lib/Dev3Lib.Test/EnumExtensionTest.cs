@@ -35,7 +35,7 @@ namespace Dev3Lib.Test
             string val = "3";
             testEnum outVal;
 
-            if (val.TryGetEnumValue<testEnum>(out outVal))
+            if (val.ToInt32().TryGetEnumValue<testEnum>(out outVal))
                 Assert.AreEqual(testEnum.AbCd, outVal);
         }
 
@@ -44,7 +44,7 @@ namespace Dev3Lib.Test
         {
             string val = "3";
 
-            Assert.AreEqual(testEnum.AbCd, val.GetEnumValue(testEnum.AB));
+            Assert.AreEqual(testEnum.AbCd, val.ToInt32().GetEnumValue(testEnum.AB));
         }
         [TestMethod]
         [ExpectedException(typeof(EnumValueException))]
@@ -52,7 +52,7 @@ namespace Dev3Lib.Test
         {
             string val = "5";
 
-            Assert.AreEqual(testEnum.AbCd, val.GetEnumValue(testEnum.AB, true));
+            Assert.AreEqual(testEnum.AbCd, val.ToInt32().GetEnumValue(testEnum.AB, true));
         }
     }
 }
