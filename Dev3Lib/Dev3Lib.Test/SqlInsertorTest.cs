@@ -12,16 +12,15 @@ namespace Dev3Lib.Test
         [TestMethod]
         public void Insert_Test()
         {
-            ContainerBuilder builder = new ContainerBuilder();
-            builder.RegisterType<SqlInserter>().As<IInserter>();
 
-            using (SqlConnection conn = new SqlConnection("Initial Catalog=tbaDATA;Data Source=(local)\\Sqlexpress;Integrated Security=true"))
+            DependencyFactory.PartialSetContainer(builder => {
+                builder.RegisterType<SqlInserter>().As<IInserter>();
+                builder.RegisterType<DefaultDbContext>().As<IDbContext>().WithParameter(new TypedParameter(typeof(string), "Initial Catalog=tbaDATA;Data Source=(local)\\Sqlexpress;Integrated Security=true"));
+            });
+           
+            using (DependencyFactory.BeginScope())
             {
-                conn.Open();
-
-                builder.RegisterInstance(conn).ExternallyOwned();
-
-                var inserter = builder.Build().Resolve<IInserter>();
+                var inserter = DependencyFactory.Resolve<IInserter>();
 
                 inserter.Insert("tblTBAFeedback", new SqlValue[] {
                 new SqlValue{
@@ -45,6 +44,42 @@ namespace Dev3Lib.Test
                 Value="cest@163.com",
                 }
                 });
+            }
+        }
+
+        [TestMethod]
+        public void Insert_With_Return()
+        {
+            DependencyFactory.PartialSetContainer(builder =>
+            {
+                builder.RegisterType<SqlInserter>().As<IInserter>();
+                builder.RegisterType<DefaultDbContext>().As<IDbContext>().WithParameter(new TypedParameter(typeof(string), "Initial Catalog=tbaDATA;Data Source=(local)\\Sqlexpress;Integrated Security=true"));
+            });
+
+            using (DependencyFactory.BeginScope())
+            {
+                var inserter = DependencyFactory.Resolve<IInserter>();
+
+                var id = inserter.Insert("tblTBAError", new SqlValue[] {
+                new SqlValue{
+                ColumnName="error_message",
+                Value="test error",
+                },
+                new SqlValue{
+                ColumnName="error_stacktrace",
+                Value="stack site",
+                },
+                new SqlValue{
+                ColumnName="error_z7message",
+                Value="error message",
+                },
+                new SqlValue{
+                ColumnName="error_datetime",
+                Value=DateTime.Now,
+                },
+                }, true);
+
+                Assert.IsTrue(id != 0);
             }
         }
     }

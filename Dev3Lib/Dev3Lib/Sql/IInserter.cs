@@ -7,6 +7,6 @@ namespace Dev3Lib.Sql
 {
     public interface IInserter
     {
-        void Insert(string tableName, IEnumerable<IValue> values);
+        long Insert(string tableName, IEnumerable<IValue> values, bool returnSeed = false);
     }
 }
