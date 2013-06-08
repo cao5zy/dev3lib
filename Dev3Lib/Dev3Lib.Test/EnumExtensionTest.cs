@@ -54,5 +54,21 @@ namespace Dev3Lib.Test
 
             Assert.AreEqual(testEnum.AbCd, val.ToInt32().GetEnumValue(testEnum.AB, true));
         }
+
+        [TestMethod]
+        public void ToName_Normal_Success()
+        {
+            testEnum t = testEnum.AbCd;
+
+            Assert.AreEqual("Ab Cd", t.ToName());
+        }
+
+        [TestMethod]
+        public void ToName_Default_Success()
+        {
+            testEnum t = testEnum.AbCd;
+
+            Assert.AreEqual("ABCD", t.ToName("ABCD"));
+        }
     }
 }

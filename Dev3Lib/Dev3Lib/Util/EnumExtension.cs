@@ -140,5 +140,13 @@ namespace Dev3Lib.Util
 
             return false;
         }
+
+        public static string ToName<T>(this T enumVal, string defaultName = "")
+        {
+            if (defaultName.IsNotEmpty())
+                return defaultName;
+
+            return ConvertName(enumVal.ToString());
+        }
     }
 }
