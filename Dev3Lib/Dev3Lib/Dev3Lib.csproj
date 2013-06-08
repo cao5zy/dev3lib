@@ -53,6 +53,8 @@
     <Compile Include="Algorithms\EnumerableAlgorithms.cs" />
     <Compile Include="Algorithms\PostionNotFoundException.cs" />
     <Compile Include="DbConvert\DataReaderAdapter.cs" />
+    <Compile Include="Sql\ISqlDelete.cs" />
+    <Compile Include="Sql\SqlDelete.cs" />
     <Compile Include="Util\Converter.cs" />
     <Compile Include="DataCheck\DataCheckUtility.cs" />
     <Compile Include="DbConvert\DbConvertHelper.cs" />
