@@ -640,8 +640,9 @@ where ResponseDate is not null
              * select top 5 * from tbltbaaupair
              * */
 
-            Action<ISelector> run = (selector) => {
-                var list = selector.Return<int>((n)=>0, "select top 5 * from tbltbaaupair", null);
+            Action<ISelector> run = (selector) =>
+            {
+                var list = selector.Return<int>((n) => 0, "select top 5 * from tbltbaaupair", null);
                 Assert.AreEqual(5, list.Count);
 
                 var reader = selector.Read<int>((n) => 0, "select top 5 * from tbltbaaupair", null);
@@ -656,7 +657,58 @@ where ResponseDate is not null
 
             RunSql(run);
         }
-        
+
+        [TestMethod]
+        public void Select_LeftLikeWhere()
+        {
+            /*
+             select * from tbltbaaupair
+where firstname like '%test'
+             */
+            Action<ISelector> run = (selector) =>
+            {
+
+                var list = selector.Return<int>((n) => 0, "select * from tbltbaaupair", new LikeClause("FirstName", "test"));
+                Assert.AreEqual(4, list.Count);
+            };
+
+            RunSql(run);
+        }
+
+        [TestMethod]
+        public void Select_RightLikeWhere()
+        {
+            /*
+             select * from tbltbaaupair
+where email like 'test%'
+             */
+            Action<ISelector> run = (selector) =>
+            {
+
+                var list = selector.Return<int>((n) => 0, "select * from tbltbaaupair", new LikeClause("Email", "test",null, Comparison.RightLike));
+                Assert.AreEqual(2, list.Count);
+            };
+
+            RunSql(run);
+        }
+
+        [TestMethod]
+        public void Select_BothLikeWhere()
+        {
+            /*
+             select * from tbltbaaupair
+where email like '%test%'
+             */
+            Action<ISelector> run = (selector) =>
+            {
+
+                var list = selector.Return<int>((n) => 0, "select * from tbltbaaupair", new LikeClause("Email", "test", null, Comparison.BothLike));
+                Assert.AreEqual(4, list.Count);
+            };
+
+            RunSql(run);
+        }
+
         [TestMethod]
         public void Select_Performance_Compare()
         {
@@ -718,7 +770,8 @@ order by BlockedFlag
         [ClassInitialize]
         public static void InitClass(TestContext context)
         {
-            DependencyFactory.SetContainer(() => {
+            DependencyFactory.SetContainer(() =>
+            {
                 ContainerBuilder container = new ContainerBuilder();
 
                 container.RegisterType<DefaultDbContext>().WithParameter(new TypedParameter(typeof(string), @"Initial Catalog=tbaDATA;Data Source=.\Sqlexpress;Integrated Security=true")).As<IDbContext>().InstancePerLifetimeScope();
