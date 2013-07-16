@@ -12,6 +12,9 @@ namespace Dev3Lib.Sql
         LessThan,
         GreatorThanEqualTo,
         LessTanEqualTo,
+        LeftLike,
+        RightLike,
+        BothLike,
     }
 
     public static class ComparisonHelper

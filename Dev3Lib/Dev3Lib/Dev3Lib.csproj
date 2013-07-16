@@ -54,6 +54,7 @@
     <Compile Include="Algorithms\PostionNotFoundException.cs" />
     <Compile Include="DbConvert\DataReaderAdapter.cs" />
     <Compile Include="Sql\ISqlDelete.cs" />
+    <Compile Include="Sql\LikeClause.cs" />
     <Compile Include="Sql\SqlDelete.cs" />
     <Compile Include="Util\Converter.cs" />
     <Compile Include="DataCheck\DataCheckUtility.cs" />
