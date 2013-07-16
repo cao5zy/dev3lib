@@ -710,6 +710,23 @@ where email like '%test%'
         }
 
         [TestMethod]
+        public void Select_LikeAndWhere()
+        {
+            /*
+             select * from tbltbaaupair
+where email like '%test%' and aupairid = 12541
+             */
+            Action<ISelector> run = (selector) =>
+            {
+
+                var list = selector.Return<int>((n) => 0, "select * from tbltbaaupair", new LikeClause("Email", "test", null, Comparison.BothLike).And(new WhereClause(12541, "aupairid")));
+                Assert.AreEqual(1, list.Count);
+            };
+
+            RunSql(run);
+        }
+
+        [TestMethod]
         public void Select_Performance_Compare()
         {
             /*
