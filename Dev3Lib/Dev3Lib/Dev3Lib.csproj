@@ -39,6 +39,7 @@
       <HintPath>..\..\..\Dependencies\Autofac-3.0.1-NET40\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -52,6 +53,8 @@
   <ItemGroup>
     <Compile Include="Algorithms\EnumerableAlgorithms.cs" />
     <Compile Include="Algorithms\PostionNotFoundException.cs" />
+    <Compile Include="DataValidations\CellPhoneValidationAttribute.cs" />
+    <Compile Include="DataValidations\IdentityCardValidationAttribute.cs" />
     <Compile Include="DbConvert\DataReaderAdapter.cs" />
     <Compile Include="Sql\ISqlDelete.cs" />
     <Compile Include="Sql\LikeClause.cs" />
